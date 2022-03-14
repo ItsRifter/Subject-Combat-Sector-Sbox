@@ -10,6 +10,8 @@ public partial class HostSetup : Panel
 	public Label HostNotice;
 	public bool IsOpen = false;
 
+	public RealTimeSince KeyInputDelay = 0f;
+
 	public HostSetup()
 	{
 		StyleSheet.Load( "UI/HostSetup.scss" );
@@ -30,9 +32,10 @@ public partial class HostSetup : Panel
 
 		HostPanel.SetClass( "active", IsOpen && Local.Client.IsListenServerHost );
 
-		if (Input.Pressed(InputButton.Menu))
+		if (Input.Pressed(InputButton.Menu) && KeyInputDelay >= 0.1f)
 		{
 			IsOpen = !IsOpen;
+			KeyInputDelay = 0f;
 		}
 	}
 }
