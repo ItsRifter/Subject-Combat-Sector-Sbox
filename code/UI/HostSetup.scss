@@ -2,7 +2,7 @@
     position: absolute;
     justify-content: center;
     align-content: center;
-    left: 30%;
+    width: 100%;
     bottom: 15%;
 
     .hoster {
@@ -10,38 +10,38 @@
         font-family: Poppins;
         font-size: 64px;
         color: white;
-        opacity: 0;
+        display: none;
+        text-align: center;
 
         &.active {
-            opacity: 1;
+            display: flex;
         }
     }
 
     .hostMenu {
         backdrop-filter: blur(5px);
-        opacity: 0;
+        display: none;
         width: 100%;
         height: 60%;
         background-color: rgb(33, 33, 33);
         box-shadow: 0 0 5px black;
+        min-height: 30px;
 
         &.active {
             pointer-events: all;
-            opacity: 1;
+            display: flex;
         }
     }
 
     .nonhoster {
-        left: -50%;
-        opacity: 0;
         font-weight: 200;
         font-family: Poppins;
         font-size: 64px;
         color: white;
-        opacity: 0;
+        display: none;
 
         &.active {
-            opacity: 1;
+            display: flex;
         }
     }
 }
