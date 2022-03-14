@@ -1,0 +1,26 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	data = 
+	{
+		sounds = 
+		[
+			"sounds/raw/game/battle1.ogg",
+			"sounds/raw/game/battle2.vsnd",
+			"sounds/raw/game/battle3.vsnd",
+			"sounds/raw/game/battle4.vsnd",
+			"sounds/raw/game/battle5.vsnd",
+			"sounds/raw/game/battle6.vsnd",
+			"sounds/raw/game/battle7.vsnd",
+			"sounds/raw/game/battle8.vsnd",
+			"sounds/raw/game/battle9.vsnd",
+			"sounds/raw/game/battle10.vsnd",
+		]
+		ui = true
+		volume = 0.75
+		volumerandom = 0.0
+		pitch = 1.0
+		pitchrandom = 0.0
+		distancemax = 2000.0
+		selectionmode = "3"
+	}
+}
