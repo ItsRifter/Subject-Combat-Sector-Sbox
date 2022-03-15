@@ -19,19 +19,93 @@
     }
 
     .hostMenu {
+        border: 6px solid white;
         backdrop-filter: blur(5px);
         display: none;
-        width: 100%;
-        height: 60%;
-        background-color: rgb(33, 33, 33);
+        width: 30%;
+        background-color: rgb(55, 55, 55);
         box-shadow: 0 0 5px black;
-        min-height: 30px;
+        min-height: 300px;
+        top: 0px;
+        align-items: center;
+
+        .roundPnl {
+            width: 250px;
+            height: 125px;
+            left: 100px;
+            font-family: Poppins;
+            font-weight: 300;
+            color: white;
+            text-align: center;
+
+            .btnDown {
+                width: 128px;
+                height: 128px;
+                right: 25%;
+                background-size: 64px 128px;
+                background-repeat: repeat-y;
+                background-image: url(ui/btndown.png);
+            }
+
+            .btnUp {
+                width: 128px;
+                height: 128px;
+                right: 65%;
+                background-size: 64px 128px;
+                background-repeat: repeat-y;
+                background-image: url(ui/btnup.png);
+            }
+        }
+
+        .pointsPnl {
+            width: 275px;
+            height: 125px;
+            left: 200px;
+            font-family: Poppins;
+            font-weight: 300;
+            color: white;
+            text-align: center;
+
+            .btnDown {
+                width: 128px;
+                height: 128px;
+                right: 25%;
+                background-size: 64px 128px;
+                background-repeat: repeat-y;
+                background-image: url(ui/btndown.png);
+            }
+
+            .btnUp {
+                width: 128px;
+                height: 128px;
+                right: 65%;
+                background-size: 64px 128px;
+                background-repeat: repeat-y;
+                background-image: url(ui/btnup.png);
+            }
+        }
 
         &.active {
             pointer-events: all;
             display: flex;
         }
+
+        .submitBtn {
+            top: 35%;
+            left: -38.5%;
+            border: 4px solid black;
+
+            .submitText {
+                font-family: Poppins;
+                font-weight: 300;
+                text-align: center;
+            }
+
+            background-color: white;
+            left: 50%
+        }
     }
+
 
     .nonhoster {
         font-weight: 200;

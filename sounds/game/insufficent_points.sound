@@ -6,12 +6,12 @@
 		[
 			"sounds/raw/game/points.ogg",
 		]
-		ui = false
-		volume = 1.0
+		ui = true
+		volume = 0.5
 		volumerandom = 0.0
 		pitch = 1.0
 		pitchrandom = 0.0
-		distancemax = 2000.0
+		distancemax = 1000.0
 		selectionmode = "3"
 	}
 }

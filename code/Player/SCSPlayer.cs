@@ -13,7 +13,7 @@ partial class SCSPlayer : Player
 		Yellow
 	}
 
-	public TeamEnum CurTeam = TeamEnum.Unspecified;
+	[Net] public TeamEnum CurTeam { get; set; } = TeamEnum.Unspecified;
 
 	public override void Respawn()
 	{
@@ -89,6 +89,8 @@ partial class SCSPlayer : Player
 		base.Simulate( cl );
 
 		SimulateActiveChild( cl, ActiveChild );
+
+		TickPlayerUse();
 		SimulateGrabbing();
 	}
 }

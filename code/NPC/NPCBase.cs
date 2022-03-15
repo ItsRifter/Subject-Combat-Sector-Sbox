@@ -8,8 +8,15 @@ public partial class NPCBase : AnimEntity
 	//Basics
 	public virtual string BaseModel => "models/citizen/citizen.vmdl";
 	public virtual int BaseHealth => 1;
-	public virtual float BaseSpeed { get; set; } = 1;
+	public virtual float BaseSpeed => 1;
 	public virtual float NPCScale => 1;
+	public virtual float AlertRange => 1;
+	public virtual float AttackRange => 1;
+	public virtual int AttackDamage => 1;
+	public virtual int AttackCooldown => 1;
+
+	private NPCBase curTarget;
+	private TimeSince timeLastAttack;
 
 	public enum TeamAssignEnum
 	{
@@ -55,7 +62,7 @@ public partial class NPCBase : AnimEntity
 
 		SetBodyGroup( 1, 0 );
 
-		Steer = new NPCSteering();
+		Steer = new NPCSteerWander();
 	}
 
 	[Event.Tick.Server]
@@ -94,6 +101,44 @@ public partial class NPCBase : AnimEntity
 		animHelper.WithLookAt( EyePosition + LookDir );
 		animHelper.WithVelocity( Velocity );
 		animHelper.WithWishVelocity( InputVelocity );
+
+		if( curTarget == null)
+		{
+			var entities = FindInSphere( Position, AlertRange );
+
+			foreach ( var ent in entities )
+			{
+				if ( ent is NPCBase hostile && hostile.TeamNPC != TeamNPC )
+				{
+					Steer = new NPCSteering();
+					Steer.Target = hostile.Position;
+
+					curTarget = hostile;
+				}
+			}
+		}
+
+		if( curTarget.IsValid() && Position.Distance( curTarget.Position ) <= AttackRange )
+		{
+			if ( timeLastAttack < AttackCooldown )
+			return;
+
+			Steer = null;
+
+			DamageInfo dmgInfo = new DamageInfo();
+			dmgInfo.Damage = AttackDamage;
+			dmgInfo.Attacker = this;
+
+			curTarget.TakeDamage( dmgInfo );
+			timeLastAttack = 0;
+
+		} else if ( !curTarget.IsValid() || Position.Distance( curTarget.Position ) > AttackRange )
+		{
+			if( Steer == null)
+				Steer = new NPCSteerWander();
+
+			curTarget = null;
+		}
 	}
 	protected virtual void Move( float timeDelta )
 	{

@@ -1,14 +1,25 @@
 ﻿using System;
 using Sandbox;
 
-[Library( "scs_trigger_crystalbox_enhance", Description = "A trigger multiple that does specific actions" )]
+[Library( "scs_trigger_crystalbox", Description = "A trigger multiple that does specific actions" )]
 [Hammer.AutoApplyMaterial( "materials/tools/toolstrigger.vmat" )]
 [Hammer.Model]
 [Hammer.SupportsSolid]
-public partial class TriggerCrystalBox : TriggerMultiple
+public partial class TriggerCrystalBox : BaseTrigger
 {
-	[Property( "Upgrader" ), Description("Should this be an upgrade trigger")]
-	public bool IsUpgrader { get; set; } = false;
+	public enum TriggerType
+	{
+		Unknown,
+		Storage,
+		Randomizer,
+		Upgrader
+	}
+
+	[Property( "Type" ), Description("What type of special trigger is this")]
+	public TriggerType TypeOfTrigger { get; set; } = TriggerType.Unknown;
+
+	protected Output OnFail { get; set; }
+
 	public enum TeamTriggerBox
 	{
 		Unknown,
@@ -23,42 +34,58 @@ public partial class TriggerCrystalBox : TriggerMultiple
 
 	public TeamPoints TeamPointTracker;
 
+	private int CurTierIndex = 0;
+	private int previousTiersLeveled = 0;
 	public override void Spawn()
 	{
 		base.Spawn();
 
 		if ( TeamTriggerAssigned == TeamTriggerBox.Unknown )
-			return;
+			return;		
+	}
 
-		var ents = FindAllByName( "TeamPoints" );
-
-		if ( TeamTriggerAssigned == TeamTriggerBox.Red )
+	public override void OnTouchStart( Entity toucher )
+	{
+		if(TeamPointTracker == null)
 		{
+			var ents = All;
+
 			foreach ( var entity in ents )
 			{
-				if( entity is TeamPoints teamPoint && teamPoint.TeamPointAssigned.ToString() == TeamTriggerAssigned.ToString())
+				if ( entity is TeamPoints teamPoint && teamPoint.TeamPointAssigned.ToString().Contains( TeamTriggerAssigned.ToString()) )
 				{
 					TeamPointTracker = teamPoint;
 				}
 			}
 		}
-	}
-
-	public override void OnTouchStart( Entity toucher )
-	{
-		base.OnTouchStart( toucher );
 
 		if( toucher is TeamCrystalBox crystalBox )
 		{
-			if ( !TeamPointTracker.AttemptRandomize() )
+			if( TypeOfTrigger == TriggerType.Randomizer)
 			{
-				PlaySound( "insufficent_points" );
-				return;
+				if ( !TeamPointTracker.AttemptRandomize() )
+				{
+					OnFail.Fire( this );
+					return;
+				}
+
+				crystalBox.RandomizeStats();
+				TeamPointTracker.SubtractPoints( 1 );
+
 			}
 
-			crystalBox.RandomizeStats();
-			TeamPointTracker.SubtractPoints( 4 );
+			if(TypeOfTrigger == TriggerType.Upgrader)
+			{
+				if(!TeamPointTracker.AttemptUpgrader( CurTierIndex ) )
+					return;
+				
+
+				TeamPointTracker.SubtractPoints( TeamPointTracker.GetUpgradeTierCost( CurTierIndex ) );
+				crystalBox.Upgrade();
+				CurTierIndex++;
+			}
+
+			base.OnTouchStart( crystalBox );
 		}
 	}
-
 }

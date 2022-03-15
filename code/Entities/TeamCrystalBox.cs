@@ -19,39 +19,63 @@ public partial class TeamCrystalBox : ModelEntity
 
 	public int CrystalTierLevel = 0;
 
-	public int CrystalStrength = 1;
+	[Net] public int CrystalStrength { get; private set; }
 
-	public NPCBase[] Tier0NPCs = new NPCBase[1] { Library.Create<NPCBase>( "Zombie" ) };
+	public string[] Tier0NPCs = new string[3] { "Zombie", "SecurityZombie", "SoldierZombie" };
+	public string[] Tier0NPCDesc = new string[3] { "Basic infected", "An armored security zombie", "A soldier zombie\nhe served his country well" };
 
-	public NPCBase NPCToSpawn;
+	public string[] NPCRarityTypes = new string[5] { "Common", "Rare", "Legendary", "Godlike", "Awesome" };
 
-	public Output OnUpgrade;
+	[Net] public string NPCToSpawn { get; private set; }
+	[Net] public string NPCDescription { get; private set; }
+	[Net] public string NPCRarity { get; private set; }
 
 	public override void Spawn()
 	{
 		base.Spawn();
 		SetModel( "models/game/crystal_box.vmdl" );
-		NPCToSpawn = Library.Create<NPCBase>( "Zombie" );
-		NPCToSpawn.Delete();
+
+		NPCToSpawn = Tier0NPCs[0];
+		NPCDescription = Tier0NPCDesc[0];
 
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+		CrystalStrength = 1;
+		NPCRarity = NPCRarityTypes[0];
 	}
 
 	public void Upgrade()
 	{
 		CrystalTierLevel++;
 		CrystalStrength = 1;
-
-		OnUpgrade.Fire(this);
+		NPCRarity = NPCRarityTypes[0];
 	}
 
-	[Input]
 	public void RandomizeStats()
 	{
 		CrystalStrength = Rand.Int( 1, 3 );
 
-		if(CrystalTierLevel == 0)
-			NPCToSpawn = Tier0NPCs[Rand.Int( 0, Tier0NPCs.Length )];
+		int chanceRarity = Rand.Int( 1, 100 );
+
+		if ( chanceRarity <= 40 )
+			NPCRarity = NPCRarityTypes[0];
+		else if ( chanceRarity > 40 && chanceRarity <= 65)
+			NPCRarity = NPCRarityTypes[1];
+		else if ( chanceRarity > 65 && chanceRarity <= 80 )
+			NPCRarity = NPCRarityTypes[2];
+		else if ( chanceRarity > 80 && chanceRarity <= 95 )
+			NPCRarity = NPCRarityTypes[3];
+		else if ( chanceRarity > 95 && chanceRarity <= 99 )
+			NPCRarity = NPCRarityTypes[4];
+		else if ( chanceRarity > 99 && chanceRarity <= 100 )
+			NPCRarity = NPCRarityTypes[5];
+
+		if ( CrystalTierLevel == 0 )
+		{
+			int random = Rand.Int( 1, Tier0NPCs.Length - 1 );
+
+			NPCToSpawn = Tier0NPCs[random];
+			NPCDescription = Tier0NPCDesc[random];
+		}
 	}
 
 

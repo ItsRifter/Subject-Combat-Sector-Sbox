@@ -26,7 +26,7 @@ metadata
 	model(resource:vmdl) { report = true hide_when_solid = true }: "World Model" : "" : "The model this entity should use."
 	skin(materialgroup) { group = "Rendering" hide_when_solid = true } : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) { group = "Rendering" hide_when_solid = true } : "Body Groups" : "" : "Some models have multiple variations of certain items, such as characters having different hair styles, etc."
-	assignment(choices) : "Team Assign" : 0 : "Assign the player to the team" =
+	assignment(choices) : "Team Assign" : 0 : "Assign the player to which team" =
 	[
 		0 : "Unspecified"
 		1 : "Red"
@@ -65,6 +65,53 @@ metadata
 ]
 
 //
+// GameplayManager
+//
+@PointClass base(BaseProperties_local_subject_combat_sector) = scs_gameplay_manager : ""
+[
+
+	input SetStatusIdle(void) : ""
+	input SetStatusStarting(void) : ""
+	input SetStatusActive(void) : ""
+	input SetStatusActiveBonus(void) : ""
+	input SetStatusPost(void) : ""
+
+	output OnActiveStart(void) : ""
+	output OnPost(void) : ""
+]
+
+//
+// MathCounter
+//
+@PointClass base(BaseProperties_local_subject_combat_sector) 
+metadata
+{
+	entity_tool_name = "Math Counter"
+	entity_tool_group = "Subject Combat Sector"
+	entity_tool_tip = "A Math counter tracking values and outputting results"
+}
+= scs_math_counter : ""
+[
+	startvalue(integer) : "Starting Value" : 0 : "The initial value setting"
+	minvalue(integer) : "Min Value" : 0 : "The minimum value"
+	maxvalue(integer) : "Max Value" : 1 : "The maximum value"
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input Add(integer) : ""
+	input SetMin(integer) : ""
+	input SetMax(integer) : ""
+	input SetValue(integer) : ""
+	input Subtract(integer) : ""
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+
+	output OnValueChange(void) : ""
+	output OnHitMin(void) : ""
+	output OnHitMax(void) : ""
+	output OnLostMin(void) : ""
+	output OnLostMax(void) : ""
+]
+
+//
 // NPCSpawner
 //
 @PointClass base(BaseProperties_local_subject_combat_sector) editormodel( "models/citizen/citizen.vmdl" ) 
@@ -84,6 +131,11 @@ metadata
 		3 : "Green"
 		4 : "Yellow"
 	]
+
+	input SpawnNPC(void) : ""
+
+	output NPCSpawned(void) : ""
+	output NPCKilled(void) : ""
 ]
 
 //
@@ -101,14 +153,20 @@ metadata
 	]
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
-	input RandomizeStats(void) : ""
 	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
 //
 // TeamPoints
 //
-@PointClass base(BaseProperties_local_subject_combat_sector) = scs_teampoints : ""
+@PointClass base(BaseProperties_local_subject_combat_sector) 
+metadata
+{
+	entity_tool_name = "Team Points Tracker"
+	entity_tool_group = "Subject Combat Sector"
+	entity_tool_tip = "The teams point tracker used for randomizing or upgrading"
+}
+= scs_teampoints : ""
 [
 	teampointenum(choices) : "Team Point Assigned" : 0 : "Which side will the points belong to" =
 	[
@@ -118,10 +176,9 @@ metadata
 		3 : "Green"
 		4 : "Yellow"
 	]
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
-	input SetPoints(integer) : ""
-	input AddPoints(integer) : ""
-	input SubtractPoints(integer) : ""
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
 //
@@ -146,12 +203,18 @@ metadata
 {
 	auto_apply_material = "materials/tools/toolstrigger.vmat"
 }
-= scs_trigger_crystalbox_enhance : "A trigger multiple that does specific actions"
+= scs_trigger_crystalbox : "A trigger multiple that does specific actions"
 [
 	model(resource:vmdl) { report = true hide_when_solid = true }: "World Model" : "" : "The model this entity should use."
 	skin(materialgroup) { group = "Rendering" hide_when_solid = true } : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) { group = "Rendering" hide_when_solid = true } : "Body Groups" : "" : "Some models have multiple variations of certain items, such as characters having different hair styles, etc."
-	upgrader(boolean) : "Is Upgrader" : 0 : "Should this be an upgrade trigger"
+	type(choices) : "Type Of Trigger" : 0 : "What type of special trigger is this" =
+	[
+		0 : "Unknown"
+		1 : "Storage"
+		2 : "Randomizer"
+		3 : "Upgrader"
+	]
 	teampointenum(choices) : "Team Trigger Assigned" : 0 : "Which side does this trigger belong to" =
 	[
 		0 : "Unknown"
@@ -160,7 +223,6 @@ metadata
 		3 : "Green"
 		4 : "Yellow"
 	]
-	wait(float) : "Delay before reset" : 1 : "Amount of time, in seconds, after the trigger_multiple has triggered before it can be triggered again. If set to -1, it will never trigger again (in which case you should just use a trigger_once). This affects OnTrigger output."
 	startdisabled(boolean) : "Start Disabled" : 0 : "Should this entity start disabled?"
 	actvationtags(tags) : "Actvation Tags" :  : "Entities with these tags can activate this trigger."
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
@@ -181,7 +243,7 @@ metadata
 	input Toggle(void) : "Toggles this trigger between enabled and disabled states"
 	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 
-	output OnTrigger(void) : "Called every \"Delay before reset\" seconds as long as at least one entity that passes filters is touching this trigger"
+	output OnFail(void) : ""
 	output OnStartTouch(void) : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
 	output OnEndTouch(void) : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
 	output OnStartTouchAll(void) : "Fired when an entity starts touching this trigger while no other passing entities are touching it."

@@ -1,8 +1,9 @@
 ﻿using System;
 using Sandbox;
 
-[Library("scs_teampoints"), Description("The teams point tracker used for randomizing or upgrading")]
-public partial class TeamPoints : Entity
+[Library("scs_teampoints")]
+[Hammer.EntityTool( "Team Points Tracker", "Subject Combat Sector", "The teams point tracker used for randomizing or upgrading" )]
+public partial class TeamPoints : AnimEntity
 {
 	public enum TeamPointsTypeEnum
 	{
@@ -16,38 +17,54 @@ public partial class TeamPoints : Entity
 	[Property( "TeamPointEnum" ), Description( "Which side will the points belong to" )]
 	public TeamPointsTypeEnum TeamPointAssigned { get; set; } = TeamPointsTypeEnum.Unknown;
 
-	public int Points { get; set; } = 0;
+	public int CurrentPoints { get; protected set; }
 
-	[Input]
+	private int[] tierUpgradeCosts = new int[] { 6, 12, 18, 24, 30 };
+	public override void Spawn()
+	{
+		base.Spawn();
+	}
+
 	public void SetPoints(int setPoints)
 	{
-		Points = setPoints;
+		CurrentPoints = setPoints;
 	}
 
 	public int GetTotalPoints()
 	{
-		return Points;
+		return CurrentPoints;
 	}
-	
+
+	public int GetUpgradeTierCost(int index)
+	{
+		return tierUpgradeCosts[index];
+	}
+
 	public bool AttemptRandomize()
 	{
-		if ( Points < 4 )
+		if ( CurrentPoints < 1 )
 			return false;
 
 		return true;
 
 	}
 
-	[Input]
-	public void AddPoints( int addPoints )
+	public bool AttemptUpgrader(int index)
 	{
-		Points += addPoints;
+		if ( CurrentPoints < tierUpgradeCosts[index] )
+			return false;
+
+		return true;
 	}
 
-	[Input]
+	public void AddPoints( int addPoints )
+	{
+		CurrentPoints += addPoints;
+	}
+
 	public void SubtractPoints(int takePoints)
 	{
-		Points -= takePoints;
+		CurrentPoints -= takePoints;
 	}
 
 }

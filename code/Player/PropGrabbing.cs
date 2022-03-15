@@ -11,9 +11,6 @@ public partial class SCSPlayer
 	public ModelEntity HeldEntity { get; private set; }
 
 	private TimeSince timeSinceDrop;
-
-	private Entity lastActiveChild;
-
 	public void SimulateGrabbing()
 	{
 		if ( !IsServer )
@@ -50,8 +47,6 @@ public partial class SCSPlayer
 
 				if ( tr.Entity is TeamCrystalBox crystalBox )
 				{
-					lastActiveChild = ActiveChild;
-					ActiveChild = null;
 					GrabStart( crystalBox, tr.Body, EyePosition + EyeRotation.Forward * 80, EyeRotation );
 				}
 			}
@@ -62,7 +57,6 @@ public partial class SCSPlayer
 			if(GroundEntity == HeldEntity)
 			{
 				GrabEnd();
-				ActiveChild = lastActiveChild;
 			}
 
 			if ( Input.Pressed( InputButton.Attack1 ) && HeldBody.IsValid() )
@@ -70,28 +64,17 @@ public partial class SCSPlayer
 				timeSinceDrop = 0;
 				HeldBody.ApplyImpulse( EyeRotation.Forward * (HeldBody.Mass * 250.0f) );
 				GrabEnd();
-
-				ActiveChild = lastActiveChild;
-
 			}
-			else if ( Input.Pressed( InputButton.Attack2) )
+			else if ( Input.Pressed( InputButton.Attack2 ) )
 			{
 				timeSinceDrop = 0;
 				GrabEnd();
-
-				ActiveChild = lastActiveChild;
 			}
 
 			GrabMove( EyePosition, EyeRotation.Forward, EyeRotation);
 		} 
 		else
 		{
-			if ( lastActiveChild != null )
-			{
-				ActiveChild = lastActiveChild;
-				lastActiveChild = null;
-			}
-
 			GrabEnd();
 		}
 	}
