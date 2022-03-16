@@ -19,6 +19,7 @@ public partial class TriggerCrystalBox : BaseTrigger
 	public TriggerType TypeOfTrigger { get; set; } = TriggerType.Unknown;
 
 	protected Output OnFail { get; set; }
+	protected Output OnSuccess { get; set; }
 
 	public enum TeamTriggerBox
 	{
@@ -71,18 +72,22 @@ public partial class TriggerCrystalBox : BaseTrigger
 
 				crystalBox.RandomizeStats();
 				TeamPointTracker.SubtractPoints( 1 );
-
+				OnSuccess.Fire( this );
 			}
 
 			if(TypeOfTrigger == TriggerType.Upgrader)
 			{
-				if(!TeamPointTracker.AttemptUpgrader( CurTierIndex ) )
+				if ( !TeamPointTracker.AttemptUpgrader( CurTierIndex ) )
+				{
+					OnFail.Fire( this );
 					return;
-				
+				}
 
 				TeamPointTracker.SubtractPoints( TeamPointTracker.GetUpgradeTierCost( CurTierIndex ) );
 				crystalBox.Upgrade();
 				CurTierIndex++;
+
+				OnSuccess.Fire( this );
 			}
 
 			base.OnTouchStart( crystalBox );

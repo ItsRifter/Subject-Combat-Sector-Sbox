@@ -38,6 +38,7 @@
             font-weight: 300;
             color: white;
             text-align: center;
+            flex-direction: row;
 
             .btnDown {
                 width: 100px;
@@ -65,6 +66,7 @@
             font-weight: 300;
             color: white;
             text-align: center;
+            flex-direction: row;
 
             .btnDown {
                 width: 82px;
@@ -106,18 +108,20 @@
         }
 
         .teamsPnl {
-            right: 75%;
+            position: absolute;
+            right: 3.5%;
+            bottom: 85px;
+            width: 100%;
+            flex-direction: row;
 
             .text {
-                position: absolute;
                 font-family: Poppins;
-                left: 165px;
-                bottom: 5px;
+                left: 40%;
+                bottom: 25px;
                 color: white;
             }
 
             .redIcon {
-                position: absolute;
                 width: 64px;
                 height: 64px;
                 background-image: url(ui/red_team_select_icon.jpg);
@@ -129,12 +133,10 @@
             }
 
             .blueIcon {
-                position: absolute;
                 width: 64px;
                 height: 64px;
                 background-image: url(ui/blue_team_select_icon.jpg);
                 opacity: 0.35;
-                left: 150px;
 
                 &.active {
                     opacity: 1;
@@ -142,12 +144,10 @@
             }
 
             .greenIcon {
-                position: absolute;
                 width: 64px;
                 height: 64px;
                 background-image: url(ui/green_team_select_icon.jpg);
                 opacity: 0.35;
-                left: 300px;
 
                 &.active {
                     opacity: 1;
@@ -155,12 +155,10 @@
             }
 
             .yellowIcon {
-                position: absolute;
                 width: 64px;
                 height: 64px;
                 background-image: url(ui/yellow_team_select_icon.jpg);
                 opacity: 0.35;
-                left: 450px;
 
                 &.active {
                     opacity: 1;

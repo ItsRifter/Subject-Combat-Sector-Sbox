@@ -78,25 +78,6 @@ public partial class SCSGame : Sandbox.Game
 		else
 		{
 			musicPlaying.Stop();
-
-			foreach ( var client in Client.All )
-			{
-				if( client is SCSPlayer player)
-				{
-					using(Prediction.Off())
-					{
-						switch ( player.CurTeam )
-						{
-							case SCSPlayer.TeamEnum.Red:
-								player.Position = new Vector3( 2215, 835, 0 );
-								break;
-							case SCSPlayer.TeamEnum.Blue:
-								player.Position = new Vector3( 2217, 373, 0 );
-								break;
-						}
-					}
-				}
-			}
 		}
 	}
 
@@ -222,9 +203,12 @@ public partial class SCSGame : Sandbox.Game
 					totalTeams++;
 			}
 
-			if( entity is MathCounter counter)
+			if( entity is MathCounter counter )
 			{
-				counter.SetMax( totalTeams );
+				if ( counter.Name == "counter_teams_ready" )
+					counter.SetMax( totalTeams );
+				else if ( counter.Name == "counter_teams_elim" )
+					counter.SetMax( totalTeams - 1 );
 			}
 		}
 	}
