@@ -15,13 +15,13 @@ public partial class SCSGame : Sandbox.Game
 	Sound soundPlaying;
 	Sound musicPlaying;
 
-	[Net] public int MaxRounds { get; private set; } = -1;
-	[Net] public int CurRound { get; private set; } = 1;
+	[Net] protected int MaxRounds { get; private set; } = -1;
+	[Net] protected int CurRound { get; private set; } = 1;
 
-	[Net] public int RedRoundPoints { get; private set; } = 0;
-	[Net] public int BlueRoundPoints { get; private set; } = 0;
-	[Net] public int GreenRoundPoints { get; private set; } = 0;
-	[Net] public int YellowRoundPoints { get; private set; } = 0;
+	[Net] protected int RedRoundPoints { get; private set; } = 0;
+	[Net] protected int BlueRoundPoints { get; private set; } = 0;
+	[Net] protected int GreenRoundPoints { get; private set; } = 0;
+	[Net] protected int YellowRoundPoints { get; private set; } = 0;
 
 	public int TotalTeams { get; private set; } = 2;
 	public enum GameEnum
