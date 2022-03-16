@@ -32,9 +32,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\scs_sbox\\code\\subject_combat_sector.csproj",
-      "projectName": "subject_combat_sector",
-      "projectPath": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\scs_sbox\\code\\subject_combat_sector.csproj",
+      "projectUniqueName": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\scs_sbox\\code\\scs_game.csproj",
+      "projectName": "scs_game",
+      "projectPath": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\scs_sbox\\code\\scs_game.csproj",
       "packagesPath": "C:\\Users\\d_tho\\.nuget\\packages\\",
       "outputPath": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\scs_sbox\\code\\obj\\",
       "projectStyle": "PackageReference",

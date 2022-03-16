@@ -2,7 +2,7 @@
   "Title": "Subject Combat Sector",
   "Type": "game",
   "Org": "rifter",
-  "Ident": "subject_combat_sector",
+  "Ident": "scs_game",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",

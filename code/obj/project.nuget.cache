@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "t0KKHOqTHJXHgpooGa2VQ0Msb4N52zcQt44OtlKWCwIIPVjeeSvXSELBP3LfTWRsbwbRrCSNnZCjeZxEyajHOQ==",
+  "dgSpecHash": "LAti8mNeNsvPO3TlbCJdoE+0vXeDxESYUC8y/BaDiTubRRi8KxLr+gzE4/1ZVKeXA4BExQb+5FbTCkWc9xQGMQ==",
   "success": true,
-  "projectFilePath": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\scs_sbox\\code\\subject_combat_sector.csproj",
+  "projectFilePath": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\scs_sbox\\code\\scs_game.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
