@@ -31,66 +31,72 @@ public partial class HostSetup : Panel
 		HostPanel = Add.Panel( "hostMenu" );
 
 		Panel hostSection = HostPanel.Add.Panel();
+		Panel PointsControl = HostPanel.Add.Panel( "PointsControl" );
 
-		Panel roundPnl = HostPanel.Add.Panel( "roundPnl" );
-		Panel pointsPnl = HostPanel.Add.Panel( "pointsPnl" );
+			Panel roundPnl = PointsControl.Add.Panel( "roundPnl" );
+			Panel pointsPnl = PointsControl.Add.Panel( "pointsPnl" );
 
-		RoundIndexLbl = roundPnl.Add.Label();
-		PointsLbl = pointsPnl.Add.Label();
+			Panel roundBtnUp = roundPnl.Add.Panel( "btnUp" );
+			roundBtnUp.AddEventListener( "onclick", () =>
+			{
+				UpdateRoundSetting( 1 );
+			} );
 
-		Panel roundBtnUp = roundPnl.Add.Panel( "btnUp" );
+			RoundIndexLbl = roundPnl.Add.Label();
+			RoundIndexLbl.AddClass( "setupText" );
 
-		roundBtnUp.AddEventListener( "onclick", () =>
-		{
-			UpdateRoundSetting( 1 );
-		} );
+			Panel roundBtnDown = roundPnl.Add.Panel( "btnDown" );
+			roundBtnDown.AddEventListener( "onclick", () =>
+			{
+				UpdateRoundSetting( -1 );
+			} );
 
-		Panel roundBtnDown = roundPnl.Add.Panel( "btnDown" );
-		roundBtnDown.AddEventListener( "onclick", () =>
-		{
-			UpdateRoundSetting( -1 );
-		} );
+			// 
 
-		Panel pointsBtnUp = pointsPnl.Add.Panel( "btnUp" );
-		pointsBtnUp.AddEventListener( "onclick", () =>
-		{
-			UpdatePointsSetting( 1 );
-		} );
+			Panel pointsBtnUp = pointsPnl.Add.Panel( "btnUp" );
+			pointsBtnUp.AddEventListener( "onclick", () =>
+			{
+				UpdatePointsSetting( 1 );
+			} );
 
-		Panel pointsBtnDown = pointsPnl.Add.Panel( "btnDown" );
-		pointsBtnDown.AddEventListener( "onclick", () =>
-		{
-			UpdatePointsSetting( -1 );
-		} );
+			PointsLbl = pointsPnl.Add.Label();
+			PointsLbl.AddClass("setupText");
+
+			Panel pointsBtnDown = pointsPnl.Add.Panel( "btnDown" );
+			pointsBtnDown.AddEventListener( "onclick", () =>
+			{
+				UpdatePointsSetting( -1 );
+			} );
 
 		Panel teamsPnl = HostPanel.Add.Panel( "teamsPnl" );
 		Label teamSelectLbl = teamsPnl.Add.Label("Select teams for this game", "text");
+		Panel TeamsSelect = teamsPnl.Add.Panel( "teamsSel" );
 
-		redPnl = teamsPnl.Add.Panel( "redIcon" );
+		redPnl = TeamsSelect.Add.Panel( "redIcon" );
 		redPnl.AddEventListener( "onclick", () =>
 		{
 			TeamsEnabled[0] = !TeamsEnabled[0];
 		} );
 
-		bluePnl = teamsPnl.Add.Panel( "blueIcon" );
+		bluePnl = TeamsSelect.Add.Panel( "blueIcon" );
 		bluePnl.AddEventListener( "onclick", () =>
 		{
 			TeamsEnabled[1] = !TeamsEnabled[1];
 		} );
 
-		greenPnl = teamsPnl.Add.Panel( "greenIcon" );
+		greenPnl = TeamsSelect.Add.Panel( "greenIcon" );
 		greenPnl.AddEventListener( "onclick", () =>
 		{
 			TeamsEnabled[2] = !TeamsEnabled[2];
 		} );
 
-		yellowPnl = teamsPnl.Add.Panel( "yellowIcon" );
+		yellowPnl = TeamsSelect.Add.Panel( "yellowIcon" );
 		yellowPnl.AddEventListener( "onclick", () =>
 		{
 			TeamsEnabled[3] = !TeamsEnabled[3];
 		} );
 
-		Panel submitBtn = hostSection.Add.Panel( "submitBtn" );
+		Panel submitBtn = HostPanel.Add.Panel( "submitBtn" );
 		Label submitLbl = submitBtn.Add.Label( "Confirm settings", "submitText" );
 		submitBtn.AddEventListener( "onclick", () =>
 		{
