@@ -1,4 +1,6 @@
-﻿hostsetup {
+﻿$debugOutlime: 2px solid red;
+
+hostsetup {
     position: absolute;
     justify-content: center;
     align-content: center;
@@ -19,83 +21,113 @@
     }
 
     .hostMenu {
+        padding: 12px;
         border: 6px solid white;
         backdrop-filter: blur(5px);
         display: none;
-        width: 30%;
+        min-width: 30%;
         background-color: rgb(55, 55, 55);
         box-shadow: 0 0 5px black;
-        min-height: 300px;
-        top: 0px;
         align-items: center;
+        flex-direction: column;
 
-        .roundPnl {
-            width: 225px;
-            height: 25px;
-            left: 100px;
-            bottom: 100px;
-            font-family: Poppins;
-            font-weight: 300;
-            color: white;
-            text-align: center;
-            flex-direction: row;
+        .roundPnl, .pointsPnl {
+            background-color: rgb(44,44,44);
+            margin: 5px;
+            padding: 10px;
 
-            .btnDown {
-                width: 100px;
-                height: 92px;
-                right: 225px;
-                top: 15px;
-                background-image: url(ui/minusbtn.png);
+            .setupText {
+                justify-items: center;
+                align-content: center;
             }
-
-            .btnUp {
-                width: 126px;
-                height: 92px;
-                left: 0%;
-                background-size: 92px 92px;
-                background-image: url(ui/addbtn.png);
-            }
-        }
-
-        .pointsPnl {
-            width: 225px;
-            height: 25px;
-            left: 125px;
-            bottom: 100px;
-            font-family: Poppins;
-            font-weight: 300;
-            color: white;
-            text-align: center;
-            flex-direction: row;
 
             .btnDown {
                 width: 82px;
-                height: 92px;
-                right: 225px;
-                top: 15px;
+                height: 82px;
                 background-image: url(ui/minusbtn.png);
+                background-size: contain;
             }
 
             .btnUp {
-                width: 124px;
-                height: 92px;
-                left: 0%;
-                background-size: 92px 92px;
+                width: 82px;
+                height: 82px;
                 background-image: url(ui/addbtn.png);
+                background-size: contain;
             }
+        }
+
+
+        .roundPnl {
+            font-family: Poppins;
+            font-weight: 300;
+            color: white;
+            text-align: center;
+        }
+
+        .pointsPnl {
+            font-family: Poppins;
+            font-weight: 300;
+            color: white;
+            text-align: center;
         }
 
         &.active {
             pointer-events: all;
             display: flex;
         }
+        //border: $debugOutlime;
+
+        .teamsPnl {
+            align-items: center;
+            width: 100%;
+            flex-direction: column;
+
+            .teamsSel {
+                width: 100%;
+                max-width: 400px;
+                justify-content: space-around;
+            }
+
+            .text {
+                font-family: Poppins;
+                color: white;
+            }
+
+            .redIcon, .blueIcon, .greenIcon, .yellowIcon {
+                width: 64px;
+                height: 64px;
+                background-size: contain;
+                opacity: 0.35;
+
+                &:hover {
+                    opacity: 0.6;
+                }
+
+                &.active {
+                    opacity: 1;
+                }
+            }
+
+            .redIcon {
+                background-image: url(ui/red_team_select_icon.jpg);
+            }
+
+            .blueIcon {
+                background-image: url(ui/blue_team_select_icon.jpg);
+            }
+
+            .greenIcon {
+                background-image: url(ui/green_team_select_icon.jpg);
+            }
+
+            .yellowIcon {
+                background-image: url(ui/yellow_team_select_icon.jpg);
+            }
+        }
 
         .submitBtn {
-            position: absolute;
-            left: 225px;
-            top: 75px;
-            width: 118px;
-            height: 32px;
+            margin-top: 10px;
+            padding: 5px;
             border: 4px solid white;
             background-color: black;
 
@@ -104,65 +136,6 @@
                 font-weight: 300;
                 text-align: center;
                 color: white;
-            }
-        }
-
-        .teamsPnl {
-            position: absolute;
-            right: 3.5%;
-            bottom: 85px;
-            width: 100%;
-            flex-direction: row;
-
-            .text {
-                font-family: Poppins;
-                left: 40%;
-                bottom: 25px;
-                color: white;
-            }
-
-            .redIcon {
-                width: 64px;
-                height: 64px;
-                background-image: url(ui/red_team_select_icon.jpg);
-                opacity: 0.35;
-
-                &.active {
-                    opacity: 1;
-                }
-            }
-
-            .blueIcon {
-                width: 64px;
-                height: 64px;
-                background-image: url(ui/blue_team_select_icon.jpg);
-                opacity: 0.35;
-
-                &.active {
-                    opacity: 1;
-                }
-            }
-
-            .greenIcon {
-                width: 64px;
-                height: 64px;
-                background-image: url(ui/green_team_select_icon.jpg);
-                opacity: 0.35;
-
-                &.active {
-                    opacity: 1;
-                }
-            }
-
-            .yellowIcon {
-                width: 64px;
-                height: 64px;
-                background-image: url(ui/yellow_team_select_icon.jpg);
-                opacity: 0.35;
-
-                &.active {
-                    opacity: 1;
-                }
             }
         }
     }
