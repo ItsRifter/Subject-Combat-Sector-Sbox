@@ -15,6 +15,27 @@ partial class SCSPlayer : Player
 
 	[Net] public TeamEnum CurTeam { get; set; } = TeamEnum.Unspecified;
 
+	[AdminCmd( "scs_doshit" )]
+	public static void Doshit()
+	{
+		foreach ( var client in Client.All )
+		{
+			if ( client is SCSPlayer player )
+			{
+				switch ( player.CurTeam )
+				{
+					case SCSPlayer.TeamEnum.Red:
+						player.Transform = Entity.FindByName( "dest_redroom" ).Transform;
+						break;
+					case SCSPlayer.TeamEnum.Blue:
+						player.Position = new Vector3( 2217, 373, 0 );
+						break;
+				}
+
+			}
+		}
+	}
+
 	public override void Respawn()
 	{
 		base.Respawn();
@@ -84,6 +105,13 @@ partial class SCSPlayer : Player
 			RenderColor = Color.Yellow;
 	}
 
+	public override void TakeDamage( DamageInfo info )
+	{
+		if ( info.Attacker is not SCSPlayer )
+			return;
+
+		base.TakeDamage( info );
+	}
 	public override void Simulate( Client cl )
 	{
 		base.Simulate( cl );

@@ -56,15 +56,15 @@ public partial class TeamCrystalBox : ModelEntity
 
 		int chanceRarity = Rand.Int( 1, 100 );
 
-		if ( chanceRarity <= 40 )
+		if ( chanceRarity <= 50 )
 			NPCRarity = NPCRarityTypes[0];
-		else if ( chanceRarity > 40 && chanceRarity <= 65)
+		else if ( chanceRarity > 50 && chanceRarity <= 65)
 			NPCRarity = NPCRarityTypes[1];
-		else if ( chanceRarity > 65 && chanceRarity <= 80 )
+		else if ( chanceRarity > 65 && chanceRarity <= 85 )
 			NPCRarity = NPCRarityTypes[2];
-		else if ( chanceRarity > 80 && chanceRarity <= 95 )
+		else if ( chanceRarity > 85 && chanceRarity <= 97 )
 			NPCRarity = NPCRarityTypes[3];
-		else if ( chanceRarity > 95 && chanceRarity <= 99 )
+		else if ( chanceRarity > 97 && chanceRarity <= 99 )
 			NPCRarity = NPCRarityTypes[4];
 		else if ( chanceRarity > 99 && chanceRarity <= 100 )
 			NPCRarity = NPCRarityTypes[5];

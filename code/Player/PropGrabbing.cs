@@ -23,7 +23,7 @@ public partial class SCSPlayer
 				if ( timeSinceDrop < 0.5f )
 					return;
 
-				var tr = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * 80 )
+				var tr = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * 120 )
 					.UseHitboxes()
 					.Ignore( this, false )
 					.Radius( 4.0f )
@@ -47,7 +47,7 @@ public partial class SCSPlayer
 
 				if ( tr.Entity is TeamCrystalBox crystalBox )
 				{
-					GrabStart( crystalBox, tr.Body, EyePosition + EyeRotation.Forward * 80, EyeRotation );
+					GrabStart( crystalBox, tr.Body, EyePosition + EyeRotation.Forward * 120, EyeRotation );
 				}
 			}
 		}

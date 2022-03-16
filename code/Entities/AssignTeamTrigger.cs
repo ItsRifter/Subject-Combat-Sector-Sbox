@@ -26,7 +26,9 @@ public partial class AssignTeamTrigger : TriggerTeleport
 
 	public override void StartTouch( Entity other )
 	{
-		if ( StartDisabled )
+		base.StartTouch( other );
+
+		if ( SCSGame.Current.GameStatus != SCSGame.GameEnum.Active )
 			return;
 
 		if ( other is SCSPlayer player )
@@ -35,26 +37,26 @@ public partial class AssignTeamTrigger : TriggerTeleport
 			{
 				case TeamType.Unspecified:
 					player.CurTeam = SCSPlayer.TeamEnum.Unspecified;
-					SetModel( "models/player/hevsuit_white.vmdl" );
+					player.SetModel( "models/player/hevsuit_white.vmdl" );
 					break;
 				case TeamType.Red:
 					player.CurTeam = SCSPlayer.TeamEnum.Red;
-					SetModel( "models/player/hevsuit_red.vmdl" );
+					player.SetModel( "models/player/hevsuit_red.vmdl" );
 					break;
 				case TeamType.Blue:
 					player.CurTeam = SCSPlayer.TeamEnum.Blue;
-					SetModel( "models/player/hevsuit_blue.vmdl" );
+					player.SetModel( "models/player/hevsuit_blue.vmdl" );
 					break;
 				case TeamType.Green:
 					player.CurTeam = SCSPlayer.TeamEnum.Green;
+					player.SetModel( "models/player/hevsuit_green.vmdl" );
 					break;
 				case TeamType.Yellow:
 					player.CurTeam = SCSPlayer.TeamEnum.Yellow;
+					player.SetModel( "models/player/hevsuit_yellow.vmdl" );
 					break;
 			}
 		}
-
-		base.StartTouch( other );
 	}
 }
 

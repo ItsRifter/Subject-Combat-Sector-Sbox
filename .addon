@@ -1,12 +1,14 @@
 {
   "Title": "Subject Combat Sector",
   "Type": "game",
-  "Org": "local",
+  "Org": "rifter",
   "Ident": "subject_combat_sector",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "ResourcePaths": null,
+  "ResourcePaths": [
+    "/ui/*"
+  ],
   "HasCode": true,
   "CodePath": "/code/",
   "RootNamespace": "Sandbox"

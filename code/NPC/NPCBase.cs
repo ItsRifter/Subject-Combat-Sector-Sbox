@@ -7,13 +7,13 @@ public partial class NPCBase : AnimEntity
 {
 	//Basics
 	public virtual string BaseModel => "models/citizen/citizen.vmdl";
-	public virtual int BaseHealth => 1;
-	public virtual float BaseSpeed => 1;
-	public virtual float NPCScale => 1;
+	public virtual int BaseHealth { get; set; } = 1;
+	public virtual float BaseSpeed { get; set; } = 1;
+	public virtual float NPCScale { get; set; } = 1;
 	public virtual float AlertRange => 1;
 	public virtual float AttackRange => 1;
-	public virtual int AttackDamage => 1;
-	public virtual int AttackCooldown => 1;
+	public virtual int AttackDamage { get; set; } = 1;
+	public virtual int AttackCooldown { get; set; } = 1;
 
 	private NPCBase curTarget;
 	private TimeSince timeLastAttack;
@@ -63,6 +63,38 @@ public partial class NPCBase : AnimEntity
 		SetBodyGroup( 1, 0 );
 
 		Steer = new NPCSteerWander();
+	}
+
+	public void SetStatsWithRarity( string rarity )
+	{
+		if ( rarity == "Rare" )
+		{
+			BaseHealth *= (int)1.25f;
+			BaseSpeed *= 1.5f;
+			AttackDamage *= (int)1.65f;
+			AttackCooldown /= (int)1.25f;
+		}
+		else if ( rarity == "Legendary" )
+		{
+			BaseHealth *= (int)1.5f;
+			BaseSpeed *= 1.75f;
+			AttackDamage *= (int)1.95f;
+			AttackCooldown /= (int)1.50f;
+		}
+		else if ( rarity == "Godlike" )
+		{
+			BaseHealth *= (int)1.75f;
+			BaseSpeed *= 2.0f;
+			AttackDamage *= (int)2.25f;
+			AttackCooldown /= (int)1.75f;
+		}
+		else if ( rarity == "Awesome" )
+		{
+			BaseHealth *= (int)2.25f;
+			BaseSpeed *= 2.25f;
+			AttackDamage += (int)2.55f;
+			AttackCooldown /= (int)2.0f;
+		}
 	}
 
 	[Event.Tick.Server]

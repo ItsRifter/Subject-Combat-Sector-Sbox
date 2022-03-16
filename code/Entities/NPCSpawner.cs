@@ -22,6 +22,7 @@ public partial class NPCSpawner : Entity
 
 	protected Output NPCSpawned { get; set; }
 	protected Output NPCKilled { get; set; }
+	protected Output AllNPCsDead { get; set; }
 
 	private TimeSince timeUntilSpawn;
 	private bool shouldSpawn = true;
@@ -60,6 +61,8 @@ public partial class NPCSpawner : Entity
 
 					var npc = Library.Create<NPCBase>( boxes[i].NPCToSpawn );
 
+					npc.SetStatsWithRarity( boxes[i].NPCRarity);
+
 					npc.Position = Position;
 					npc.Rotation = Rotation;
 
@@ -88,7 +91,7 @@ public partial class NPCSpawner : Entity
 					shouldSpawn = false;
 					timeUntilSpawn = 0;
 
-					NPCSpawned.Fire( this );
+					_ = NPCSpawned.Fire( this );
 				}
 			}
 		}
@@ -105,6 +108,7 @@ public partial class NPCSpawner : Entity
 		if(aliveNPCs.Count <= 0)
 		{
 			Sound.FromScreen( TeamSide.ToString() + "_defeated");
+			AllNPCsDead.Fire( this );
 		}
 
 		NPCKilled.Fire( this );

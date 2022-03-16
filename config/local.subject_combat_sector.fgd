@@ -136,6 +136,7 @@ metadata
 
 	output NPCSpawned(void) : ""
 	output NPCKilled(void) : ""
+	output AllNPCsDead(void) : ""
 ]
 
 //

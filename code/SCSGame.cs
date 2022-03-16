@@ -2,6 +2,7 @@
 using Sandbox;
 using Sandbox.UI.Construct;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,27 +45,6 @@ public partial class SCSGame : Sandbox.Game
 	[Net, Change( nameof( UpdateRoundStatus ))]
 	public RoundEnum RoundStatus { get; set; }
 
-	public void UpdateRoundStatus( RoundEnum oldStatus, RoundEnum newStatus)
-	{
-		if ( RoundStatus == RoundEnum.Starting )
-		{
-			Sound.FromScreen( "prepare" );
-		} else if ( RoundStatus == RoundEnum.Active )
-		{
-			musicPlaying = Sound.FromScreen( "battle_music" );
-			musicPlaying.SetVolume( 0.50f );
-		}
-		else if (RoundStatus == RoundEnum.Active_Bonus)
-		{
-			musicPlaying = Sound.FromScreen( "bonus_round" );
-			musicPlaying.SetVolume( 0.50f );
-		} 
-		else
-		{
-			musicPlaying.Stop();
-		}
-	}
-
 	public SCSGame()
 	{
 		if(IsServer)
@@ -76,6 +56,47 @@ public partial class SCSGame : Sandbox.Game
 		if(IsClient)
 		{
 			oldHUD = new SCSHud();
+		}
+	}
+
+	public void UpdateRoundStatus( RoundEnum oldStatus, RoundEnum newStatus )
+	{
+		if ( RoundStatus == RoundEnum.Starting )
+		{
+			Sound.FromScreen( "prepare" );
+		}
+		else if ( RoundStatus == RoundEnum.Active )
+		{
+			musicPlaying = Sound.FromScreen( "battle_music" );
+			musicPlaying.SetVolume( 0.50f );
+		}
+		else if ( RoundStatus == RoundEnum.Active_Bonus )
+		{
+			musicPlaying = Sound.FromScreen( "bonus_round" );
+			musicPlaying.SetVolume( 0.50f );
+		}
+		else
+		{
+			musicPlaying.Stop();
+
+			foreach ( var client in Client.All )
+			{
+				if( client is SCSPlayer player)
+				{
+					using(Prediction.Off())
+					{
+						switch ( player.CurTeam )
+						{
+							case SCSPlayer.TeamEnum.Red:
+								player.Position = new Vector3( 2215, 835, 0 );
+								break;
+							case SCSPlayer.TeamEnum.Blue:
+								player.Position = new Vector3( 2217, 373, 0 );
+								break;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -147,13 +168,16 @@ public partial class SCSGame : Sandbox.Game
 	}
 
 	[ServerCmd("scs_cmd_startgame")]
-	public static void StartGame(int settingRound, int startPoints)
+	public static void StartGame(int settingRound, int startPoints, bool redOn, bool blueOn, bool greenOn, bool yellowOn )
 	{
-		Event.Run( "scs_evnt_startgame", settingRound, startPoints );
+		bool[] teamsEnabled = new bool[4] { redOn, blueOn, greenOn, yellowOn };
+
+		Event.Run( "scs_evnt_startgame", settingRound );
+		Event.Run( "scs_evnt_setupteams" , startPoints, teamsEnabled );
 	}
 
 	[Event("scs_evnt_startgame")]
-	public void StartGameplay( int settingRound, int startPoints )
+	public void StartGameplay( int settingRound )
 	{
 		if ( GameStatus == GameEnum.Active )
 			return;
@@ -161,26 +185,48 @@ public partial class SCSGame : Sandbox.Game
 		GameStatus = GameEnum.Active;
 
 		MaxRounds = settingRound;
+	}
 
-		var entities = All;
-
-		foreach ( var entity in entities )
+	[Event( "scs_evnt_setupteams" )]
+	public void SetUpTeams( int startPoints, bool[] teams )
+	{
+		foreach ( var entity in Entity.All )
 		{
 			if ( entity is TeamPoints pointTracker )
 			{
-				pointTracker.SetPoints( startPoints );
+				if( (pointTracker.TeamPointAssigned == TeamPoints.TeamPointsTypeEnum.Red && teams[0]) ||
+					(pointTracker.TeamPointAssigned == TeamPoints.TeamPointsTypeEnum.Blue && teams[1]) ||
+					(pointTracker.TeamPointAssigned == TeamPoints.TeamPointsTypeEnum.Green && teams[2]) ||
+					(pointTracker.TeamPointAssigned == TeamPoints.TeamPointsTypeEnum.Yellow && teams[3])
+				)
+					pointTracker.SetPoints( startPoints );
 			}
 
 			if ( entity is AssignTeamTrigger teamAssigner )
 			{
-				if ( teamAssigner.TeamAssign == AssignTeamTrigger.TeamType.Red || teamAssigner.TeamAssign == AssignTeamTrigger.TeamType.Blue )
-				{
-					teamAssigner.StartDisabled = false;
+				if(teamAssigner.TeamAssign == AssignTeamTrigger.TeamType.Red && teams[0])
 					teamAssigner.Enable();
-				}
+				else if (teamAssigner.TeamAssign == AssignTeamTrigger.TeamType.Blue && teams[1] )
+					teamAssigner.Enable();
+				else if ( teamAssigner.TeamAssign == AssignTeamTrigger.TeamType.Green && teams[2] )
+					teamAssigner.Enable();
+				else if ( teamAssigner.TeamAssign == AssignTeamTrigger.TeamType.Yellow && teams[3] )
+					teamAssigner.Enable();
+			}
+
+			int totalTeams = 0;
+			
+			for ( int i = 0; i < 4; i++ )
+			{
+				if ( teams[i] )
+					totalTeams++;
+			}
+
+			if( entity is MathCounter counter)
+			{
+				counter.SetMax( totalTeams );
 			}
 		}
-
 	}
 
 	public override void ClientJoined( Client client )

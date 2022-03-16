@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
@@ -13,8 +14,12 @@ public partial class HostSetup : Panel
 
 	public bool IsOpen = false;
 	public bool GameStarted = false;
+	public bool[] TeamsEnabled = new bool[4] { false, false, false, false };
 
-
+	Panel redPnl;
+	Panel bluePnl;
+	Panel greenPnl;
+	Panel yellowPnl;
 	public RealTimeSince KeyInputDelay = 0f;
 
 	private int roundSetting = 1;
@@ -25,7 +30,7 @@ public partial class HostSetup : Panel
 		StyleSheet.Load( "UI/HostSetup.scss" );
 		HostPanel = Add.Panel( "hostMenu" );
 
-		Panel hostSection = HostPanel.Add.Panel( "menu" );
+		Panel hostSection = HostPanel.Add.Panel();
 
 		Panel roundPnl = HostPanel.Add.Panel( "roundPnl" );
 		Panel pointsPnl = HostPanel.Add.Panel( "pointsPnl" );
@@ -41,29 +46,52 @@ public partial class HostSetup : Panel
 		} );
 
 		Panel roundBtnDown = roundPnl.Add.Panel( "btnDown" );
-
 		roundBtnDown.AddEventListener( "onclick", () =>
 		{
 			UpdateRoundSetting( -1 );
 		} );
 
 		Panel pointsBtnUp = pointsPnl.Add.Panel( "btnUp" );
-
 		pointsBtnUp.AddEventListener( "onclick", () =>
 		{
 			UpdatePointsSetting( 1 );
 		} );
 
 		Panel pointsBtnDown = pointsPnl.Add.Panel( "btnDown" );
-
 		pointsBtnDown.AddEventListener( "onclick", () =>
 		{
 			UpdatePointsSetting( -1 );
 		} );
 
-		Panel submitBtn = HostPanel.Add.Panel( "submitBtn" );
-		Label submitLbl = submitBtn.Add.Label( "Start game", "submitText" );
+		Panel teamsPnl = HostPanel.Add.Panel( "teamsPnl" );
+		Label teamSelectLbl = teamsPnl.Add.Label("Select teams for this game", "text");
 
+		redPnl = teamsPnl.Add.Panel( "redIcon" );
+		redPnl.AddEventListener( "onclick", () =>
+		{
+			TeamsEnabled[0] = !TeamsEnabled[0];
+		} );
+
+		bluePnl = teamsPnl.Add.Panel( "blueIcon" );
+		bluePnl.AddEventListener( "onclick", () =>
+		{
+			TeamsEnabled[1] = !TeamsEnabled[1];
+		} );
+
+		greenPnl = teamsPnl.Add.Panel( "greenIcon" );
+		greenPnl.AddEventListener( "onclick", () =>
+		{
+			TeamsEnabled[2] = !TeamsEnabled[2];
+		} );
+
+		yellowPnl = teamsPnl.Add.Panel( "yellowIcon" );
+		yellowPnl.AddEventListener( "onclick", () =>
+		{
+			TeamsEnabled[3] = !TeamsEnabled[3];
+		} );
+
+		Panel submitBtn = hostSection.Add.Panel( "submitBtn" );
+		Label submitLbl = submitBtn.Add.Label( "Confirm settings", "submitText" );
 		submitBtn.AddEventListener( "onclick", () =>
 		{
 			SubmitSettings();
@@ -94,9 +122,39 @@ public partial class HostSetup : Panel
 			pointSetting = 99;
 	}
 
+	public bool CanPlay(bool[] teamsEnabled )
+	{
+		List<bool> canPlayGame = new List<bool>();
+
+		for ( int i = 0; i < 4; i++ )
+		{
+			if ( teamsEnabled[i] )
+				canPlayGame.Add( teamsEnabled[i] );
+		}
+
+		if ( canPlayGame.Count < 2 )
+		{
+			Log.Error( "Only one or no teams are enabled, there should be at minimum two teams enabled" );
+			return false;
+		}
+
+		if(Client.All.Count < canPlayGame.Count)
+		{
+			Log.Error( "There are less players to fill every team making this game unplayable" );
+			return false;
+		}
+
+		return true;
+	}
+
 	public void SubmitSettings()
 	{
-		ConsoleSystem.Run( "scs_cmd_startgame", roundSetting, pointSetting );
+		bool[] teamCheck = new bool[4] { TeamsEnabled[0], TeamsEnabled[1], TeamsEnabled[2], TeamsEnabled[3] };
+
+		if ( !CanPlay( teamCheck ) )
+			return;
+
+		ConsoleSystem.Run( "scs_cmd_startgame", roundSetting, pointSetting, TeamsEnabled[0], TeamsEnabled[1], TeamsEnabled[2], TeamsEnabled[3] );
 		GameStarted = true;
 	}
 
@@ -125,5 +183,10 @@ public partial class HostSetup : Panel
 
 		RoundIndexLbl.SetText( "Max Rounds: " + roundSetting );
 		PointsLbl.SetText( "Starting Points: " + pointSetting );
+
+		redPnl.SetClass( "active", TeamsEnabled[0] );
+		bluePnl.SetClass( "active", TeamsEnabled[1] );
+		greenPnl.SetClass( "active", TeamsEnabled[2] );
+		yellowPnl.SetClass( "active", TeamsEnabled[3] );
 	}
 }
