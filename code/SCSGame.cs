@@ -11,7 +11,6 @@ public partial class SCSGame : Sandbox.Game
 {
 	public static new SCSGame Current => Sandbox.Game.Current as SCSGame;
 
-	SCSHud oldHUD;
 	Sound soundPlaying;
 	Sound musicPlaying;
 
@@ -65,7 +64,7 @@ public partial class SCSGame : Sandbox.Game
 
 		if(IsClient)
 		{
-			oldHUD = new SCSHud();
+			new SCSHud();
 		}
 	}
 
@@ -204,15 +203,6 @@ public partial class SCSGame : Sandbox.Game
 		teleporter.Enable();
 
 		GameStatus = GameEnum.Post;
-	}
-
-	[Event.Hotload]
-	public void UpdateHUD()
-	{
-		oldHUD?.Delete();
-
-		if ( IsClient )
-			oldHUD = new SCSHud();
 	}
 
 	[ServerCmd("scs_cmd_startgame")]

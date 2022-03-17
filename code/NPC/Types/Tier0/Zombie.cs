@@ -11,7 +11,7 @@ public partial class Zombie : NPCBase
 	public override float AlertRange => 100;
 	public override float AttackRange => 50;
 	public override int AttackDamage => 15;
-	public override int AttackCooldown => 3;
+	public override float AttackCooldown => 3.25f;
 	public override void Spawn()
 	{
 		base.Spawn();		

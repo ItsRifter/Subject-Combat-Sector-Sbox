@@ -7,7 +7,6 @@ using Sandbox.UI.Construct;
 public partial class HostSetup : Panel
 {
 	public Panel HostPanel;
-	public Label WaitingLbl;
 	public Label HostNotice;
 	public Label RoundIndexLbl;
 	public Label PointsLbl;
@@ -105,7 +104,6 @@ public partial class HostSetup : Panel
 		} );
 		
 		HostNotice = Add.Label( "Press Q to setup game", "hoster" );
-		WaitingLbl = Add.Label( "Waiting on Host to setup game", "nonhoster" );
 	}
 
 	private void UpdateRoundSetting(int rndUpdate)
@@ -171,13 +169,11 @@ public partial class HostSetup : Panel
 		if ( GameStarted )
 		{
 			HostNotice.SetClass( "active", false );
-			WaitingLbl.SetClass( "active", false );
 			HostPanel.SetClass( "active", false );
 			return;
 		}
 
 		HostNotice.SetClass( "active", Local.Client.IsListenServerHost && !IsOpen );
-		WaitingLbl.SetClass( "active", !Local.Client.IsListenServerHost );
 
 		HostPanel.SetClass( "active", IsOpen && Local.Client.IsListenServerHost );
 

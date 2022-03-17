@@ -2,16 +2,17 @@
 using System;
 using System.Linq;
 
-public partial class SoldierZombie : NPCBase
+public partial class Military : NPCBase
 {
-	public override int BaseHealth => 110;
-	public override float BaseSpeed => 20;
+	public override int BaseHealth => 150;
+	public override float BaseSpeed => 15;
 	public override string BaseModel => "models/citizen/citizen.vmdl";
 	public override float NPCScale => 1.0f;
 	public override float AlertRange => 100;
-	public override float AttackRange => 50;
-	public override int AttackDamage => 25;
-	public override int AttackCooldown => 3;
+	public override float AttackRange => 125;
+	public override int AttackDamage => 35;
+	public override float AttackCooldown => 2.10f;
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -23,5 +24,8 @@ public partial class SoldierZombie : NPCBase
 		var vest = new ModelEntity();
 		vest.SetModel( "models/citizen_clothes/vest/Tactical_Vest/Models/tactical_vest.vmdl_c" );
 		vest.SetParent( this, true );
+
+		SetAnimParameter( "holdtype", 1 );
+		SetAnimParameter( "aim_body_weight", 1.0f );
 	}
 }

@@ -13,7 +13,7 @@ public partial class NPCBase : AnimEntity
 	public virtual float AlertRange => 1;
 	public virtual float AttackRange => 1;
 	public virtual int AttackDamage { get; set; } = 1;
-	public virtual int AttackCooldown { get; set; } = 1;
+	public virtual float AttackCooldown { get; set; } = 1;
 
 	private NPCBase curTarget;
 	private TimeSince timeLastAttack;
@@ -146,13 +146,7 @@ public partial class NPCBase : AnimEntity
 			return;
 
 			Steer = null;
-
-			DamageInfo dmgInfo = new DamageInfo();
-			dmgInfo.Damage = AttackDamage;
-			dmgInfo.Attacker = this;
-
-			curTarget.TakeDamage( dmgInfo );
-			timeLastAttack = Rand.Int(-AttackCooldown, 0);
+			AttackHostile( curTarget );
 
 		} else if ( !curTarget.IsValid() || Position.Distance( curTarget.Position ) > AttackRange )
 		{
@@ -162,6 +156,17 @@ public partial class NPCBase : AnimEntity
 			curTarget = null;
 		}
 	}
+
+	public virtual void AttackHostile(NPCBase curTarget)
+	{
+		DamageInfo dmgInfo = new DamageInfo();
+		dmgInfo.Damage = AttackDamage;
+		dmgInfo.Attacker = this;
+
+		curTarget.TakeDamage( dmgInfo );
+		timeLastAttack = Rand.Float( -AttackCooldown, 0 );
+	}
+
 	protected virtual void Move( float timeDelta )
 	{
 		var bbox = BBox.FromHeightAndRadius( 64, 4 );

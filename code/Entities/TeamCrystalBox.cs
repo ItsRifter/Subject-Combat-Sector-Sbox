@@ -24,10 +24,13 @@ public partial class TeamCrystalBox : ModelEntity
 
 	public string[] Tier0NPCs = new string[3] { "Zombie", "SecurityZombie", "SoldierZombie" };
 	public string[] Tier0NPCDesc = new string[3] { "Basic infected", "An armored security zombie", "A soldier zombie\nhe served his country well" };
+	
+	public string[] Tier1NPCs = new string[4] { "Security", "Rebel", "Military", "Scout" };
+	public string[] Tier1NPCDesc = new string[4] { "A security officer", "A rule breaking rebel", "Military Soldier", "A Scoutsman" };
 
-	public string[] NPCRarityTypes = new string[5] { "Common", "Rare", "Legendary", "Godlike", "Awesome" };
+	public string[] NPCRarityTypes = new string[6] { "Common", "Rare", "Legendary", "Godlike", "Awesome", "Epic" };
 
-	private int pastCrystalTiers = 0;
+	private int pastCrystalTiers;
 	private int currentTiers = 0;
 
 	[Net] public string NPCToSpawn { get; private set; }
@@ -45,6 +48,8 @@ public partial class TeamCrystalBox : ModelEntity
 
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 		CrystalStrength = 1;
+
+		pastCrystalTiers = 0;
 	}
 
 	public void Upgrade()
@@ -57,7 +62,13 @@ public partial class TeamCrystalBox : ModelEntity
 
 		PlaySound( "tierup_" + CrystalTierLevel );
 
-		if ( pastCrystalTiers == 4)
+		if(CrystalTierLevel == 1)
+		{
+			NPCToSpawn = Tier1NPCs[0];
+			NPCDescription = Tier1NPCDesc[0];
+		}
+
+		if ( pastCrystalTiers >= 4)
 		{
 			PlaySound( "newtech" );
 			pastCrystalTiers = 0;
@@ -108,6 +119,12 @@ public partial class TeamCrystalBox : ModelEntity
 
 			NPCToSpawn = Tier0NPCs[random];
 			NPCDescription = Tier0NPCDesc[random];
+		} else if (CrystalTierLevel == 1)
+		{
+			int random = Rand.Int( 1, Tier1NPCs.Length - 1 );
+
+			NPCToSpawn = Tier1NPCs[random];
+			NPCDescription = Tier1NPCDesc[random];
 		}
 	}
 
