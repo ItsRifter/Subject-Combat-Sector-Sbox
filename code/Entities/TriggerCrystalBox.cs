@@ -35,9 +35,6 @@ public partial class TriggerCrystalBox : BaseTrigger
 
 	public TeamPoints TeamPointTracker;
 
-	private int CurTierIndex = 0;
-	//private int previousTiersLeveled = 0;
-
 	TimeSince timeLastFail;
 
 	public override void Spawn()
@@ -83,7 +80,7 @@ public partial class TriggerCrystalBox : BaseTrigger
 
 			if(TypeOfTrigger == TriggerType.Upgrader)
 			{
-				if ( !TeamPointTracker.AttemptUpgrader( CurTierIndex ) )
+				if ( !TeamPointTracker.AttemptUpgrader( crystalBox.GetTierLevel() ) )
 				{
 					if ( timeLastFail > 1.5f )
 						OnFail.Fire( this );
@@ -92,9 +89,14 @@ public partial class TriggerCrystalBox : BaseTrigger
 					return;
 				}
 
-				TeamPointTracker.SubtractPoints( TeamPointTracker.GetUpgradeTierCost( CurTierIndex ) );
+				if ( !crystalBox.CanUpgradeNextTier() )
+					return;
+
+				if ( TeamPointTracker.GetUpgradeTierCost( crystalBox.GetTierLevel() ) == 999 )
+					return;
+
+				TeamPointTracker.SubtractPoints( TeamPointTracker.GetUpgradeTierCost( crystalBox.GetTierLevel() ) );
 				crystalBox.Upgrade();
-				CurTierIndex++;
 
 				OnSuccess.Fire( this );
 			}

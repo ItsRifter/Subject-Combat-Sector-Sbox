@@ -19,7 +19,7 @@ public partial class TeamPoints : AnimEntity
 
 	[Net] protected int CurrentPoints { get; private set; }
 
-	private int[] tierUpgradeCosts = new int[] { 6, 12, 18, 24, 30 };
+	private int[] tierUpgradeCosts = new int[] { 8, 16, 24, 32, 40, 999 };
 	public override void Spawn()
 	{
 		base.Spawn();

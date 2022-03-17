@@ -43,9 +43,9 @@ public partial class CrystalBoxInfo : Panel
 			{	
 				BoxNPCName.SetText( teamBox.NPCToSpawn );
 				BoxDesc.SetText( teamBox.NPCDescription );
-				BoxTier.SetText( $"Tier: {teamBox.CrystalTierLevel}" );
+				BoxTier.SetText( $"Tier: {teamBox.GetTierLevel()}" );
 				BoxRarity.SetText( $"Rarity: {teamBox.NPCRarity}" );
-				BoxStrength.SetText( $"Strength: {teamBox.CrystalStrength}" );
+				BoxStrength.SetText( $"Strength: {teamBox.GetStrengthLevel()}" );
 			}
 		}
 	}

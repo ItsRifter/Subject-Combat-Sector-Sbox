@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Sandbox;
 
 [Library( "scs_crystalbox" ), Description("The teams crystal box, DO NOT CHANGE THE MODEL")]
@@ -17,7 +18,7 @@ public partial class TeamCrystalBox : ModelEntity
 	[Property( "AssignCrystalBoxTeam" ), Description( "Assigns the box to the selected team" )]
 	public TeamCrystalBoxType TeamBoxAssignment { get; set; } = TeamCrystalBoxType.Unknown;
 
-	public int CrystalTierLevel = 0;
+	[Net] protected int CrystalTierLevel { get; private set; } = 0;
 
 	[Net] public int CrystalStrength { get; private set; }
 
@@ -25,6 +26,9 @@ public partial class TeamCrystalBox : ModelEntity
 	public string[] Tier0NPCDesc = new string[3] { "Basic infected", "An armored security zombie", "A soldier zombie\nhe served his country well" };
 
 	public string[] NPCRarityTypes = new string[5] { "Common", "Rare", "Legendary", "Godlike", "Awesome" };
+
+	private int pastCrystalTiers = 0;
+	private int currentTiers = 0;
 
 	[Net] public string NPCToSpawn { get; private set; }
 	[Net] public string NPCDescription { get; private set; }
@@ -37,10 +41,10 @@ public partial class TeamCrystalBox : ModelEntity
 
 		NPCToSpawn = Tier0NPCs[0];
 		NPCDescription = Tier0NPCDesc[0];
+		NPCRarity = NPCRarityTypes[0];
 
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 		CrystalStrength = 1;
-		NPCRarity = NPCRarityTypes[0];
 	}
 
 	public void Upgrade()
@@ -48,6 +52,35 @@ public partial class TeamCrystalBox : ModelEntity
 		CrystalTierLevel++;
 		CrystalStrength = 1;
 		NPCRarity = NPCRarityTypes[0];
+
+		pastCrystalTiers++;
+
+		PlaySound( "tierup_" + CrystalTierLevel );
+
+		if ( pastCrystalTiers == 4)
+		{
+			PlaySound( "newtech" );
+			pastCrystalTiers = 0;
+			currentTiers++;
+		}
+	}
+
+	public bool CanUpgradeNextTier()
+	{
+		if ( currentTiers == CrystalTierLevel )
+			return true;
+
+		return false;
+	}
+
+	public int GetTierLevel()
+	{
+		return CrystalTierLevel;
+	}
+
+	public int GetStrengthLevel()
+	{
+		return CrystalStrength;
 	}
 
 	public void RandomizeStats()

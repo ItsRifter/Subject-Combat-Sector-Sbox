@@ -16,12 +16,12 @@ public partial class SCSGame : Sandbox.Game
 	Sound musicPlaying;
 
 	[Net] protected int MaxRounds { get; private set; } = -1;
-	[Net] protected int CurRound { get; private set; } = 1;
-
 	[Net] protected int RedRoundPoints { get; private set; } = 0;
 	[Net] protected int BlueRoundPoints { get; private set; } = 0;
 	[Net] protected int GreenRoundPoints { get; private set; } = 0;
 	[Net] protected int YellowRoundPoints { get; private set; } = 0;
+
+	[Net] protected SCSPlayer.TeamEnum WinningTeam { get; private set; }
 
 	[ConVar.Replicated]
 	protected static bool DebugMode { get; set; } = false;
@@ -33,7 +33,7 @@ public partial class SCSGame : Sandbox.Game
 		Log.Info( "Debug: " + DebugMode );
 	}
 
-	public int TotalTeams { get; private set; } = 2;
+	protected int TotalTeams { get; private set; } = 2;
 	public enum GameEnum
 	{
 		Idle,
@@ -69,6 +69,35 @@ public partial class SCSGame : Sandbox.Game
 		}
 	}
 
+	public SCSPlayer.TeamEnum GetWinningTeam()
+	{
+		return WinningTeam;
+	}
+
+	public int GetTotalTeams()
+	{
+		return TotalTeams;
+	}
+
+	public int GetTargetScore()
+	{
+		return MaxRounds;
+	}
+
+	public int GetTeamScore(string team)
+	{
+		if ( team == "red" )
+			return RedRoundPoints;
+		else if ( team == "blue" )
+			return BlueRoundPoints;
+		else if ( team == "green" )
+			return GreenRoundPoints;
+		else if ( team == "yellow" )
+			return YellowRoundPoints;
+
+		return 0;
+	}
+
 	public override void DoPlayerNoclip( Client player )
 	{
 		if ( !DebugMode )
@@ -87,8 +116,6 @@ public partial class SCSGame : Sandbox.Game
 				pl.DevController = new NoclipController();
 			}
 		}
-
-		//base.DoPlayerNoclip( player );
 	}
 
 	public void UpdateRoundStatus( RoundEnum oldStatus, RoundEnum newStatus )
@@ -155,38 +182,28 @@ public partial class SCSGame : Sandbox.Game
 			winningPoints.AddPoints( 2 * TotalTeams );
 		}
 
-		CurRound++;
-
-		if( CurRound > MaxRounds )
-		{
-			EndGame();
-		}
+		if ( RedRoundPoints >= MaxRounds )
+			EndGame( SCSPlayer.TeamEnum.Red );
+		else if ( BlueRoundPoints >= MaxRounds )
+			EndGame( SCSPlayer.TeamEnum.Blue );
+		else if ( GreenRoundPoints >= MaxRounds )
+			EndGame( SCSPlayer.TeamEnum.Green );
+		else if ( YellowRoundPoints >= MaxRounds )
+			EndGame( SCSPlayer.TeamEnum.Yellow );
 	}
 
-	public void EndGame()
+	public void EndGame(SCSPlayer.TeamEnum winningTeam)
 	{
 		Log.Info( "Game over" );
-		List<(string team, int points)> teams = new();
-
-		teams.Add( ("red", RedRoundPoints) );
-		teams.Add( ("blue", BlueRoundPoints) );
-		teams.Add( ("green", GreenRoundPoints) );
-		teams.Add( ("yellow", YellowRoundPoints) );
-
-		string winningTeam = "Draw";
-		int lastScore = 0;
-
-		foreach ( var score in teams )
-		{
-			if(score.points > lastScore )
-			{
-				winningTeam = score.team;
-				lastScore = score.points;
-			}
-		}
-
 		Log.Info( winningTeam + " has won!" );
 
+		WinningTeam = winningTeam;
+
+		var teleporter = Entity.FindByName( "tele_" + winningTeam.ToString().ToLower() + "_win" ) as TeamTeleporter;
+
+		teleporter.Enable();
+
+		GameStatus = GameEnum.Post;
 	}
 
 	[Event.Hotload]
@@ -270,6 +287,8 @@ public partial class SCSGame : Sandbox.Game
 				else if ( counter.Name == "counter_teams_elim" )
 					counter.SetMax( totalTeams - 1 );
 			}
+
+			TotalTeams = totalTeams;
 		}
 	}
 

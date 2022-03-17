@@ -2,13 +2,15 @@
     position: absolute;
     left: 0px;
     bottom: 75px;
-    opacity: 1;
+    opacity: 0;
     font-family: Arial;
     font-size: 48px;
     color: white;
-
+    display: none;
+    flex-direction: column;
+    
     &.active {
+        display: flex;
         opacity: 1;
     }
-
 }

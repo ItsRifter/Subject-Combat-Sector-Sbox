@@ -22,15 +22,16 @@ public partial class TeamTeleporter : TriggerTeleport
 	public override void Spawn()
 	{
 		base.Spawn();
+
+		Enabled = !StartDisabled;
 	}
 
 	public override void StartTouch( Entity other )
 	{
+		if ( !Enabled ) return;
+		
 		base.StartTouch( other );
-
-		if ( !Enabled )
-			return;
-
+		
 		var targetRed = Entity.FindByName( RedTarget );
 		var targetBlue = Entity.FindByName( BlueTarget );
 		var targetGreen = Entity.FindByName( GreenTarget );

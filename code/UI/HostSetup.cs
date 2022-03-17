@@ -20,7 +20,7 @@ public partial class HostSetup : Panel
 	Panel bluePnl;
 	Panel greenPnl;
 	Panel yellowPnl;
-	public RealTimeSince KeyInputDelay = 0f;
+	RealTimeSince KeyInputDelay = 0f;
 
 	private int roundSetting = 3;
 	private int pointSetting = 4;
@@ -187,7 +187,7 @@ public partial class HostSetup : Panel
 			KeyInputDelay = 0f;
 		}
 
-		RoundIndexLbl.SetText( "Max Rounds: " + roundSetting );
+		RoundIndexLbl.SetText( "Points to win: " + roundSetting );
 		PointsLbl.SetText( "Starting Points: " + pointSetting );
 
 		redPnl.SetClass( "active", TeamsEnabled[0] );

@@ -45,7 +45,7 @@ public partial class NPCSpawner : Entity
 				boxes.Add( box );
 		}
 
-		for ( int i = 0; i < 4 * SCSGame.Current.TotalTeams; i++ )
+		for ( int i = 0; i < 4 * SCSGame.Current.GetTotalTeams(); i++ )
 		{
 			if ( boxes[i].TeamBoxAssignment.ToString().Contains( TeamSide.ToString() ) )
 			{
@@ -113,10 +113,10 @@ public partial class NPCSpawner : Entity
 
 		aliveNPCs.Remove( killedNPC );
 
-		if( aliveNPCs.Count <= 0)
+		if( aliveNPCs.Count == 0 )
 			AllNPCsDead.Fire( this );
 
-		NPCKilled.Fire( this );
+		//NPCKilled.Fire( this );
 	}
 
 	[Event( "scs_clearnpcs" )]
