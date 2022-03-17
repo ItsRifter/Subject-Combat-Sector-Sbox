@@ -15,27 +15,6 @@ partial class SCSPlayer : Player
 
 	[Net] public TeamEnum CurTeam { get; set; } = TeamEnum.Unspecified;
 
-	[AdminCmd( "scs_doshit" )]
-	public static void Doshit()
-	{
-		foreach ( var client in Client.All )
-		{
-			if ( client is SCSPlayer player )
-			{
-				switch ( player.CurTeam )
-				{
-					case SCSPlayer.TeamEnum.Red:
-						player.Transform = Entity.FindByName( "dest_redroom" ).Transform;
-						break;
-					case SCSPlayer.TeamEnum.Blue:
-						player.Position = new Vector3( 2217, 373, 0 );
-						break;
-				}
-
-			}
-		}
-	}
-
 	public override void Respawn()
 	{
 		base.Respawn();

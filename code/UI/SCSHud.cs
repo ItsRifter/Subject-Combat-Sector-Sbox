@@ -13,5 +13,6 @@ public partial class SCSHud : Sandbox.HudEntity<RootPanel>
 		RootPanel.AddChild<VitalSigns>();
 		RootPanel.AddChild<HostSetup>();
 		RootPanel.AddChild<CrystalBoxInfo>();
+		RootPanel.AddChild<StatTracker>();
 	}
 }

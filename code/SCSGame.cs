@@ -23,6 +23,16 @@ public partial class SCSGame : Sandbox.Game
 	[Net] protected int GreenRoundPoints { get; private set; } = 0;
 	[Net] protected int YellowRoundPoints { get; private set; } = 0;
 
+	[ConVar.Replicated]
+	protected static bool DebugMode { get; set; } = false;
+
+	[AdminCmd("scs_debug")]
+	public static void DebugCmd()
+	{
+		DebugMode = !DebugMode;
+		Log.Info( "Debug: " + DebugMode );
+	}
+
 	public int TotalTeams { get; private set; } = 2;
 	public enum GameEnum
 	{
@@ -59,6 +69,28 @@ public partial class SCSGame : Sandbox.Game
 		}
 	}
 
+	public override void DoPlayerNoclip( Client player )
+	{
+		if ( !DebugMode )
+			return;
+
+		if(player.Pawn is SCSPlayer pl)
+		{
+			if ( pl.DevController is NoclipController )
+			{
+				Log.Info( "Noclip Mode Off" );
+				pl.DevController = null;
+			}
+			else
+			{
+				Log.Info( "Noclip Mode On" );
+				pl.DevController = new NoclipController();
+			}
+		}
+
+		//base.DoPlayerNoclip( player );
+	}
+
 	public void UpdateRoundStatus( RoundEnum oldStatus, RoundEnum newStatus )
 	{
 		if ( RoundStatus == RoundEnum.Starting )
@@ -84,13 +116,15 @@ public partial class SCSGame : Sandbox.Game
 	public void DeclareRoundWinner()
 	{
 		NPCSpawner winningTeam = null;
+		TeamPoints winningPoints = null;
 
 		foreach ( var ents in All )
 		{
 			if(ents is NPCSpawner spawner && spawner.aliveNPCs.Count > 0)
-			{
 				winningTeam = spawner;
-			}
+
+			if(ents is TeamPoints pointGiver && winningTeam.TeamSide.ToString().Contains( pointGiver.TeamPointAssigned.ToString() ) )
+				winningPoints = pointGiver;
 		}
 
 		if ( winningTeam != null )
@@ -106,7 +140,19 @@ public partial class SCSGame : Sandbox.Game
 					Sound.FromScreen( "blue_win" );
 					BlueRoundPoints++;
 					break;
+
+				case NPCSpawner.TeamSideEnum.Green:
+					Sound.FromScreen( "green_win" );
+					GreenRoundPoints++;
+					break;
+
+				case NPCSpawner.TeamSideEnum.Yellow:
+					Sound.FromScreen( "yellow_win" );
+					YellowRoundPoints++;
+					break;
 			}
+
+			winningPoints.AddPoints( 2 * TotalTeams );
 		}
 
 		CurRound++;
@@ -119,24 +165,28 @@ public partial class SCSGame : Sandbox.Game
 
 	public void EndGame()
 	{
-		Log.Info( "Game over, lets see who won" );
+		Log.Info( "Game over" );
+		List<(string team, int points)> teams = new();
 
-		if ( RedRoundPoints > BlueRoundPoints && RedRoundPoints > GreenRoundPoints && RedRoundPoints > YellowRoundPoints )
+		teams.Add( ("red", RedRoundPoints) );
+		teams.Add( ("blue", BlueRoundPoints) );
+		teams.Add( ("green", GreenRoundPoints) );
+		teams.Add( ("yellow", YellowRoundPoints) );
+
+		string winningTeam = "Draw";
+		int lastScore = 0;
+
+		foreach ( var score in teams )
 		{
-			Log.Info( "Red team has won!" );
+			if(score.points > lastScore )
+			{
+				winningTeam = score.team;
+				lastScore = score.points;
+			}
 		}
-		else if ( BlueRoundPoints > RedRoundPoints && BlueRoundPoints > GreenRoundPoints && BlueRoundPoints > YellowRoundPoints )
-		{
-			Log.Info( "Blue team has won!" );
-		}
-		else if ( GreenRoundPoints > RedRoundPoints && GreenRoundPoints > BlueRoundPoints && GreenRoundPoints > YellowRoundPoints )
-		{
-			Log.Info( "Green team has won!" );
-		}
-		else if ( YellowRoundPoints > RedRoundPoints && YellowRoundPoints > BlueRoundPoints && YellowRoundPoints > GreenRoundPoints )
-		{
-			Log.Info( "Green team has won!" );
-		}
+
+		Log.Info( winningTeam + " has won!" );
+
 	}
 
 	[Event.Hotload]
@@ -193,6 +243,16 @@ public partial class SCSGame : Sandbox.Game
 					teamAssigner.Enable();
 				else if ( teamAssigner.TeamAssign == AssignTeamTrigger.TeamType.Yellow && teams[3] )
 					teamAssigner.Enable();
+			}
+
+			if(entity is TeamCrystalBox teamBox)
+			{
+				if ( (teamBox.TeamBoxAssignment == TeamCrystalBox.TeamCrystalBoxType.Red && !teams[0]) ||
+				(teamBox.TeamBoxAssignment == TeamCrystalBox.TeamCrystalBoxType.Blue && !teams[1]) ||
+				(teamBox.TeamBoxAssignment == TeamCrystalBox.TeamCrystalBoxType.Green && !teams[2]) ||
+				(teamBox.TeamBoxAssignment == TeamCrystalBox.TeamCrystalBoxType.Yellow && !teams[3]) )
+					teamBox.Delete();
+				
 			}
 
 			int totalTeams = 0;

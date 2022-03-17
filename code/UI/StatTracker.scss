@@ -1,0 +1,14 @@
+﻿stattracker {
+    position: absolute;
+    left: 0px;
+    bottom: 75px;
+    opacity: 1;
+    font-family: Arial;
+    font-size: 48px;
+    color: white;
+
+    &.active {
+        opacity: 1;
+    }
+
+}

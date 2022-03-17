@@ -17,7 +17,7 @@ public partial class TeamPoints : AnimEntity
 	[Property( "TeamPointEnum" ), Description( "Which side will the points belong to" )]
 	public TeamPointsTypeEnum TeamPointAssigned { get; set; } = TeamPointsTypeEnum.Unknown;
 
-	public int CurrentPoints { get; protected set; }
+	[Net] protected int CurrentPoints { get; private set; }
 
 	private int[] tierUpgradeCosts = new int[] { 6, 12, 18, 24, 30 };
 	public override void Spawn()

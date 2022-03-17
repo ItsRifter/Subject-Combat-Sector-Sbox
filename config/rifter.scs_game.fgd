@@ -214,14 +214,10 @@ metadata
 	model(resource:vmdl) { report = true hide_when_solid = true }: "World Model" : "" : "The model this entity should use."
 	skin(materialgroup) { group = "Rendering" hide_when_solid = true } : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) { group = "Rendering" hide_when_solid = true } : "Body Groups" : "" : "Some models have multiple variations of certain items, such as characters having different hair styles, etc."
-	assignment(choices) : "Team To Teleport" : 0 : "Assign the player to which team" =
-	[
-		0 : "Unspecified"
-		1 : "Red"
-		2 : "Blue"
-		3 : "Green"
-		4 : "Yellow"
-	]
+	redroomtarget(string) : "Red Target" :  : ""
+	blueroomtarget(string) : "Blue Target" :  : ""
+	greenroomtarget(string) : "Green Target" :  : ""
+	yellowroomtarget(string) : "Yellow Target" :  : ""
 	target(string) : "Remote Destination" :  : "The entity specifying a location to which entities should be teleported to."
 	teleport_relative(boolean) : "Teleport Relatively" : 0 : "If set, teleports the entity with an offset depending on where the entity was in the trigger teleport. Think world portals. Place the target entity accordingly."
 	keep_velocity(boolean) : "Keep Velocity" : 0 : "If set, the teleported entity will not have it's velocity reset to 0."

@@ -66,25 +66,30 @@ public partial class NPCSpawner : Entity
 					npc.Position = Position;
 					npc.Rotation = Rotation;
 
-					aliveNPCs.Add( npc );
-
 					switch ( TeamSide )
 					{
 						case TeamSideEnum.Red:
 							npc.TeamNPC = NPCBase.TeamAssignEnum.Red;
 							npc.RenderColor = Color.Red;
+							aliveNPCs.Add( npc );
 							break;
+
 						case TeamSideEnum.Blue:
 							npc.TeamNPC = NPCBase.TeamAssignEnum.Blue;
 							npc.RenderColor = Color.Blue;
+							aliveNPCs.Add( npc );
 							break;
+
 						case TeamSideEnum.Green:
 							npc.TeamNPC = NPCBase.TeamAssignEnum.Green;
 							npc.RenderColor = Color.Green;
+							aliveNPCs.Add( npc );
 							break;
+
 						case TeamSideEnum.Yellow:
 							npc.TeamNPC = NPCBase.TeamAssignEnum.Yellow;
 							npc.RenderColor = Color.Yellow;
+							aliveNPCs.Add( npc );
 							break;
 					}
 
@@ -103,13 +108,13 @@ public partial class NPCSpawner : Entity
 		if ( SCSGame.Current.RoundStatus != SCSGame.RoundEnum.Active )
 			return;
 
+		if ( aliveNPCs.Count <= 0 )
+			return;
+
 		aliveNPCs.Remove( killedNPC );
 
-		if(aliveNPCs.Count <= 0)
-		{
-			Sound.FromScreen( TeamSide.ToString() + "_defeated");
+		if( aliveNPCs.Count <= 0)
 			AllNPCsDead.Fire( this );
-		}
 
 		NPCKilled.Fire( this );
 	}

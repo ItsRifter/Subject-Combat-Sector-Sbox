@@ -28,7 +28,7 @@ public partial class AssignTeamTrigger : TriggerTeleport
 	{
 		base.StartTouch( other );
 
-		if ( SCSGame.Current.GameStatus != SCSGame.GameEnum.Active )
+		if ( !Enabled )
 			return;
 
 		if ( other is SCSPlayer player )

@@ -7,17 +7,17 @@ using Sandbox;
 [Hammer.SupportsSolid]
 public partial class TeamTeleporter : TriggerTeleport
 {
-	public enum TeleTeamEnum
-	{
-		Unspecified,
-		Red,
-		Blue,
-		Green,
-		Yellow
-	}
+	[Property( "RedRoomTarget" )]
+	public string RedTarget { get; set; }
 
-	[Property("Assignment"), Description("Assign the player to which team")]
-	public TeleTeamEnum TeamToTeleport { get; set; } = TeleTeamEnum.Unspecified;
+	[Property("BlueRoomTarget")]
+	public string BlueTarget { get; set; }
+
+	[Property( "GreenRoomTarget" )]
+	public string GreenTarget { get; set; }
+
+	[Property( "YellowRoomTarget" )]
+	public string YellowTarget { get; set; }
 
 	public override void Spawn()
 	{
@@ -28,24 +28,29 @@ public partial class TeamTeleporter : TriggerTeleport
 	{
 		base.StartTouch( other );
 
-		if ( SCSGame.Current.RoundStatus != SCSGame.RoundEnum.Post )
+		if ( !Enabled )
 			return;
+
+		var targetRed = Entity.FindByName( RedTarget );
+		var targetBlue = Entity.FindByName( BlueTarget );
+		var targetGreen = Entity.FindByName( GreenTarget );
+		var targetYellow = Entity.FindByName( YellowTarget );
 
 		if ( other is SCSPlayer player )
 		{
-			switch ( TeamToTeleport )
+			switch ( player.CurTeam )
 			{
-				case TeleTeamEnum.Red:
-					player.Transform = FindByName( "dest_redroom" ).Transform;
+				case SCSPlayer.TeamEnum.Red:
+					player.Transform = targetRed.Transform;
 					break;
-				case TeleTeamEnum.Blue:
-					player.Transform = FindByName( "dest_blueroom" ).Transform;
+				case SCSPlayer.TeamEnum.Blue:
+					player.Transform = targetBlue.Transform;
 					break;
-				case TeleTeamEnum.Green:
-					player.Transform = FindByName( "dest_greenroom" ).Transform;
+				case SCSPlayer.TeamEnum.Green:
+					player.Transform = targetGreen.Transform;
 					break;
-				case TeleTeamEnum.Yellow:
-					player.Transform = FindByName( "dest_yellowroom" ).Transform;
+				case SCSPlayer.TeamEnum.Yellow:
+					player.Transform = targetYellow.Transform;
 					break;
 			}
 

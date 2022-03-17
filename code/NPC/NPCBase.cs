@@ -29,15 +29,6 @@ public partial class NPCBase : AnimEntity
 
 	public TeamAssignEnum TeamNPC = TeamAssignEnum.Unknown;
 
-	public enum SpecialType
-	{
-		Standard,
-		Armoured,
-		Cloaked
-	}
-
-	public virtual SpecialType NPCType => SpecialType.Standard;
-
 	[ConVar.Replicated]
 	public static bool scs_npc_drawoverlay { get; set; }
 	public NPCDebugDraw Draw => NPCDebugDraw.Once;
@@ -46,7 +37,6 @@ public partial class NPCBase : AnimEntity
 
 	Vector3 InputVelocity;
 
-	NPCNavigation Path = new NPCNavigation();
 	public NPCSteering Steer;
 
 	public override void Spawn()
@@ -113,7 +103,7 @@ public partial class NPCBase : AnimEntity
 			}
 
 			if( scs_npc_drawoverlay )
-				DebugOverlay.Sphere( Position + Vector3.Down * 8, 42, Color.Red );
+				DebugOverlay.Sphere( Position + Vector3.Up * 64, AttackRange, Color.Red );
 
 		}
 
@@ -136,7 +126,7 @@ public partial class NPCBase : AnimEntity
 
 		if( curTarget == null)
 		{
-			var entities = FindInSphere( Position, AlertRange );
+			var entities = FindInSphere( Position + Vector3.Up * 64, AlertRange);
 
 			foreach ( var ent in entities )
 			{
@@ -162,7 +152,7 @@ public partial class NPCBase : AnimEntity
 			dmgInfo.Attacker = this;
 
 			curTarget.TakeDamage( dmgInfo );
-			timeLastAttack = 0;
+			timeLastAttack = Rand.Int(-AttackCooldown, 0);
 
 		} else if ( !curTarget.IsValid() || Position.Distance( curTarget.Position ) > AttackRange )
 		{

@@ -22,7 +22,7 @@ public partial class HostSetup : Panel
 	Panel yellowPnl;
 	public RealTimeSince KeyInputDelay = 0f;
 
-	private int roundSetting = 1;
+	private int roundSetting = 3;
 	private int pointSetting = 4;
 	public HostSetup()
 	{
@@ -112,8 +112,8 @@ public partial class HostSetup : Panel
 	{
 		roundSetting += rndUpdate;
 
-		if( roundSetting < 1)
-			roundSetting = 1;
+		if( roundSetting < 3)
+			roundSetting = 3;
 		else if ( roundSetting > 20)
 			roundSetting = 20;
 	}

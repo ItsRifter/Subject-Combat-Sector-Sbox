@@ -2,18 +2,21 @@
 
 Layer0
 {
-	shader "vr_simple.vfx"
+	shader "complex.vfx"
 
-	//---- PBR ----
-	F_METALNESS_TEXTURE 1
+	//---- Color ----
+	F_TINT_MASK 1
 
 	//---- Ambient Occlusion ----
+	g_flAmbientOcclusionDirectDiffuse "0.000"
+	g_flAmbientOcclusionDirectSpecular "0.000"
 	TextureAmbientOcclusion "materials/default/default_ao.tga"
 
 	//---- Color ----
 	g_flModelTintAmount "1.000"
 	g_vColorTint "[0.000000 0.662745 1.000000 1.000000]"
 	TextureColor "materials/raw/player/mkivtewst_Mk_Iv_Arms_color.png"
+	TextureTintMask "materials/raw/player/tintmaskarms.png"
 
 	//---- Fade ----
 	g_flFadeExponent "1.000"
@@ -26,7 +29,7 @@ Layer0
 	g_flDirectionalLightmapStrength "1.000"
 
 	//---- Metalness ----
-	TextureMetalness "materials/raw/player/mkivtewst_Mk_Iv_Arms_metalnessmask.png"
+	g_flMetalness "0.000"
 
 	//---- Normal ----
 	TextureNormal "materials/raw/player/mkivtewst_Mk_Iv_Arms_normal.png"

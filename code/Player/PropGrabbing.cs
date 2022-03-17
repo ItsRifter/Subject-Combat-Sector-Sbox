@@ -10,17 +10,21 @@ public partial class SCSPlayer
 	public Rotation HeldRot { get; private set; }
 	public ModelEntity HeldEntity { get; private set; }
 
-	private TimeSince timeSinceDrop;
+	TimeSince timeSinceDrop;
+	//TimeSince timeSinceGrabbed;
 	public void SimulateGrabbing()
 	{
 		if ( !IsServer )
 			return;
 
-		if ( Input.Pressed( InputButton.Use ) && !HeldBody.IsValid())
+		if ( Input.Pressed( InputButton.Use ))
 		{
+			if( HeldBody.IsValid() )
+				GrabEnd();
+
 			using ( Prediction.Off() )
 			{
-				if ( timeSinceDrop < 0.5f )
+				if ( timeSinceDrop < 0.1f )
 					return;
 
 				var tr = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * 120 )

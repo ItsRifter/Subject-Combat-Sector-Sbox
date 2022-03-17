@@ -2,18 +2,21 @@
 
 Layer0
 {
-	shader "vr_simple.vfx"
+	shader "complex.vfx"
 
-	//---- PBR ----
-	F_AMBIENT_OCCLUSION_TEXTURE 1
+	//---- Color ----
+	F_TINT_MASK 1
 
 	//---- Ambient Occlusion ----
+	g_flAmbientOcclusionDirectDiffuse "0.000"
+	g_flAmbientOcclusionDirectSpecular "0.000"
 	TextureAmbientOcclusion "materials/raw/player/Helmet_Base_ambient_occlusion.png"
 
 	//---- Color ----
 	g_flModelTintAmount "1.000"
 	g_vColorTint "[0.000000 0.662745 1.000000 1.000000]"
 	TextureColor "materials/raw/player/mkivtewst_Helmet_Base_color.png"
+	TextureTintMask "materials/raw/player/Tint mask helm.png"
 
 	//---- Fade ----
 	g_flFadeExponent "1.000"
