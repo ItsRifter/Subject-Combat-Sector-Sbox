@@ -11,5 +11,12 @@
   ],
   "HasCode": true,
   "CodePath": "/code/",
-  "RootNamespace": "Sandbox"
+  "RootNamespace": "Sandbox",
+  "Metadata": {
+    "MapList": [
+      "rifter.scs_lab"
+    ],
+    "MapSelect": 3,
+    "MinPlayers": 1
+  }
 }

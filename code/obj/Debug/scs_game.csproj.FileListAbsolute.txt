@@ -1,0 +1,14 @@
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\.vs\output\scs_game.xml
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\.vs\output\scs_game.deps.json
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\.vs\output\scs_game.dll
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\.vs\output\scs_game.pdb
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.csproj.AssemblyReference.cache
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.GeneratedMSBuildEditorConfig.editorconfig
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.AssemblyInfoInputs.cache
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.AssemblyInfo.cs
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.csproj.CoreCompileInputs.cache
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.csproj.CopyComplete
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.dll
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\refint\scs_game.dll
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\scs_game.pdb
+D:\Program Files (x86)\Steam\steamapps\common\sbox\addons\scs_sbox\code\obj\Debug\ref\scs_game.dll

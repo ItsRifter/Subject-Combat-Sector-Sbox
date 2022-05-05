@@ -15,6 +15,8 @@ public partial class NPCBase : AnimEntity
 	public virtual int AttackDamage { get; set; } = 1;
 	public virtual float AttackCooldown { get; set; } = 1;
 
+	public virtual float EyeSightRange => 80;
+
 	private NPCBase curTarget;
 	private TimeSince timeLastAttack;
 
@@ -124,8 +126,28 @@ public partial class NPCBase : AnimEntity
 		animHelper.WithVelocity( Velocity );
 		animHelper.WithWishVelocity( InputVelocity );
 
-		if( curTarget == null)
+		if ( Steer == null && curTarget == null)
+			Steer = new NPCSteerWander();
+
+		if ( curTarget == null)
 		{
+			var eyeTR = Trace.Ray( EyePosition, EyePosition + Rotation.Forward * EyeSightRange )
+					.Ignore( this )
+					.Run();
+
+			var entsEye = FindInSphere( eyeTR.EndPosition, AlertRange / 2 );
+
+			foreach ( var entity in entsEye )
+			{
+				if ( entity is NPCBase hostile && hostile.TeamNPC != TeamNPC )
+				{
+					Steer = new NPCSteering();
+					Steer.Target = hostile.Position;
+
+					curTarget = hostile;
+				}
+			}
+
 			var entities = FindInSphere( Position + Vector3.Up * 64, AlertRange);
 
 			foreach ( var ent in entities )
@@ -150,9 +172,6 @@ public partial class NPCBase : AnimEntity
 
 		} else if ( !curTarget.IsValid() || Position.Distance( curTarget.Position ) > AttackRange )
 		{
-			if( Steer == null)
-				Steer = new NPCSteerWander();
-
 			curTarget = null;
 		}
 	}

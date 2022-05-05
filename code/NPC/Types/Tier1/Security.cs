@@ -4,7 +4,7 @@ using System.Linq;
 
 public partial class Security : NPCBase
 {
-	public override int BaseHealth => 130;
+	public override int BaseHealth => 200;
 	public override float BaseSpeed => 35;
 	public override string BaseModel => "models/citizen/citizen.vmdl";
 	public override float NPCScale => 1.0f;
