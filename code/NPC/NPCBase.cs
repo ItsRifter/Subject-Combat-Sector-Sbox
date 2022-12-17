@@ -3,7 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Sandbox;
 
-public partial class NPCBase : AnimEntity
+namespace SCS.Entities.NPC;
+
+public partial class NPCBase : AnimatedEntity
 {
 	//Basics
 	public virtual string BaseModel => "models/citizen/citizen.vmdl";
@@ -121,8 +123,8 @@ public partial class NPCBase : AnimEntity
 
 		var animHelper = new NPCAnimationHelper( this );
 
-		LookDir = Vector3.Lerp( LookDir, InputVelocity.WithZ( 0 ) * 1000, Time.Delta * 100.0f );
-		animHelper.WithLookAt( EyePosition + LookDir );
+		//LookDir = Vector3.Lerp( LookDir, InputVelocity.WithZ( 0 ) * 1000, Time.Delta * 100.0f );
+		//animHelper.WithLookAt(LookDir );
 		animHelper.WithVelocity( Velocity );
 		animHelper.WithWishVelocity( InputVelocity );
 
@@ -131,7 +133,7 @@ public partial class NPCBase : AnimEntity
 
 		if ( curTarget == null)
 		{
-			var eyeTR = Trace.Ray( EyePosition, EyePosition + Rotation.Forward * EyeSightRange )
+			/*var eyeTR = Trace.Ray( EyePosition, EyePosition + Rotation.Forward * EyeSightRange )
 					.Ignore( this )
 					.Run();
 
@@ -146,7 +148,7 @@ public partial class NPCBase : AnimEntity
 
 					curTarget = hostile;
 				}
-			}
+			}*/
 
 			var entities = FindInSphere( Position + Vector3.Up * 64, AlertRange);
 
@@ -183,7 +185,7 @@ public partial class NPCBase : AnimEntity
 		dmgInfo.Attacker = this;
 
 		curTarget.TakeDamage( dmgInfo );
-		timeLastAttack = Rand.Float( -AttackCooldown, 0 );
+		timeLastAttack = Game.Random.Float( -AttackCooldown, 0 );
 	}
 
 	protected virtual void Move( float timeDelta )
@@ -236,11 +238,11 @@ public partial class NPCBase : AnimEntity
 		Velocity = move.Velocity;
 	}
 
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
 
-		Rotation = Input.Rotation;
+		/*Rotation = Input.Rotation;
 		EyeRotation = Rotation;
 
 		Velocity += Input.Rotation * new Vector3( Input.Forward, Input.Left, Input.Up ) * BaseSpeed * 5 * Time.Delta;
@@ -250,7 +252,7 @@ public partial class NPCBase : AnimEntity
 
 		Position += Velocity * Time.Delta;
 
-		EyePosition = Position;
+		EyePosition = Position;*/
 	}
 
 	public override void TakeDamage( DamageInfo info )
@@ -269,12 +271,8 @@ public partial class NPCBase : AnimEntity
 		base.OnKilled();
 	}
 
-	public override void FrameSimulate( Client cl )
+	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-
-		Rotation = Input.Rotation;
-		EyeRotation = Rotation;
-		Position += Velocity * Time.Delta;
 	}
 }

@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 
+namespace SCS.Entities.NPC;
+
 public partial class Rebel : NPCBase
 {
 	public override int BaseHealth => 225;

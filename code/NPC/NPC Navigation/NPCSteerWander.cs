@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 
+namespace SCS.Entities.NPC;
 public class NPCSteerWander : NPCSteering
 {
 	public float MinRadius { get; set; } = 50;

@@ -4,7 +4,7 @@ using System;
 
 public struct NPCDebugDraw
 {
-	public static NPCDebugDraw Once => new NPCDebugDraw( Time.Delta * 1.5f, Host.Color, true );
+	public static NPCDebugDraw Once => new NPCDebugDraw( Time.Delta * 1.5f, Game.Color, true );
 	public static NPCDebugDraw ForSeconds( float seconds ) => Once.WithDuration( seconds );
 
 	public float Duration;
@@ -21,7 +21,7 @@ public struct NPCDebugDraw
 	public NPCDebugDraw( float duration )
 	{
 		Duration = duration;
-		Color = Host.Color;
+		Color = Game.Color;
 		DepthTest = true;
 	}
 

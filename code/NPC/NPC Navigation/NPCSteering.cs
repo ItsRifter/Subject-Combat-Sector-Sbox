@@ -1,6 +1,9 @@
 ﻿using Sandbox;
 using System;
 using System.Buffers;
+
+namespace SCS.Entities.NPC;
+
 public class NPCSteering
 {
 	protected NPCNavigation Path { get; private set; }

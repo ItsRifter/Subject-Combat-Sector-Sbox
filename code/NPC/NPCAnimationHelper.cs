@@ -7,9 +7,9 @@ namespace Sandbox
 	/// </summary>
 	public struct NPCAnimationHelper
 	{
-		AnimEntity Owner;
+		AnimatedEntity Owner;
 
-		public NPCAnimationHelper( AnimEntity entity )
+		public NPCAnimationHelper( AnimatedEntity entity )
 		{
 			Owner = entity;
 		}
@@ -19,9 +19,9 @@ namespace Sandbox
 		/// </summary>
 		public void WithLookAt( Vector3 look, float eyesWeight = 1.0f, float headWeight = 1.0f, float bodyWeight = 1.0f )
 		{
-			Owner.SetAnimLookAt( "aim_eyes", look );
-			Owner.SetAnimLookAt( "aim_head", look );
-			Owner.SetAnimLookAt( "aim_body", look );
+			Owner.SetAnimLookAt( "aim_eyes", look, Owner.Position );
+			Owner.SetAnimLookAt( "aim_head", look, Owner.Position );
+			Owner.SetAnimLookAt( "aim_body", look, Owner.Position );
 			
 			Owner.SetAnimParameter( "aim_head_weight", headWeight );
 			Owner.SetAnimParameter( "aim_body_weight", bodyWeight );

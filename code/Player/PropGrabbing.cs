@@ -1,8 +1,11 @@
 ﻿using Sandbox;
+using Sandbox.Physics;
 using System;
 using System.Linq;
 
-public partial class SCSPlayer
+namespace SCS.Player;
+
+public partial class SCSPawn
 {
 	private PhysicsBody holdBody;
 	private FixedJoint holdJoint;
@@ -14,7 +17,7 @@ public partial class SCSPlayer
 	//TimeSince timeSinceGrabbed;
 	public void SimulateGrabbing()
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( Input.Pressed( InputButton.Use ))
@@ -31,7 +34,6 @@ public partial class SCSPlayer
 					.UseHitboxes()
 					.Ignore( this, false )
 					.Radius( 4.0f )
-					.HitLayer( CollisionLayer.Debris )
 					.Run();
 
 				if ( !tr.Entity.IsValid() )
@@ -46,10 +48,10 @@ public partial class SCSPlayer
 				if ( tr.Entity.PhysicsGroup == null )
 					return;
 
-				if ( tr.Entity is not TeamCrystalBox box )
+				if ( tr.Entity is not ModelEntity box )
 					return;
 
-				if ( tr.Entity is TeamCrystalBox crystalBox )
+				if ( tr.Entity is ModelEntity crystalBox )
 				{
 					GrabStart( crystalBox, tr.Body, EyePosition + EyeRotation.Forward * 120, EyeRotation );
 				}
@@ -63,13 +65,13 @@ public partial class SCSPlayer
 				GrabEnd();
 			}
 
-			if ( Input.Pressed( InputButton.Attack1 ) && HeldBody.IsValid() )
+			if ( Input.Pressed( InputButton.PrimaryAttack ) && HeldBody.IsValid() )
 			{
 				timeSinceDrop = 0;
 				HeldBody.ApplyImpulse( EyeRotation.Forward * (HeldBody.Mass * 250.0f) );
 				GrabEnd();
 			}
-			else if ( Input.Pressed( InputButton.Attack2 ) )
+			else if ( Input.Pressed( InputButton.SecondaryAttack ) )
 			{
 				timeSinceDrop = 0;
 				GrabEnd();
@@ -83,7 +85,7 @@ public partial class SCSPlayer
 		}
 	}
 
-	private void GrabStart( TeamCrystalBox box, PhysicsBody body, Vector3 grabPos, Rotation grabRot )
+	private void GrabStart( ModelEntity box, PhysicsBody body, Vector3 grabPos, Rotation grabRot )
 	{
 		if ( !body.IsValid() )
 			return;

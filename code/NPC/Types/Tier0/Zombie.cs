@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 
+namespace SCS.Entities.NPC;
 public partial class Zombie : NPCBase
 {
 	public override int BaseHealth => 60;

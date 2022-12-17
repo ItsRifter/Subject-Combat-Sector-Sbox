@@ -8,11 +8,5 @@ public partial class SCSHud : Sandbox.HudEntity<RootPanel>
 	{
 		RootPanel.AddChild<ChatBox>();
 		RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
-		RootPanel.AddChild<NameTags>();
-
-		//RootPanel.AddChild<VitalSigns>();
-		RootPanel.AddChild<HostSetup>();
-		RootPanel.AddChild<CrystalBoxInfo>();
-		RootPanel.AddChild<StatTracker>();
 	}
 }

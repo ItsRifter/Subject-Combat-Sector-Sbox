@@ -1,6 +1,8 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
 
+namespace SCS.Entities.NPC;
+
 public class NPCNavigation
 {
 	public Vector3 TargetPosition;
@@ -12,7 +14,7 @@ public class NPCNavigation
 	{
 		bool needsBuild = false;
 
-		if ( !TargetPosition.IsNearlyEqual( to, 5 ) )
+		if ( !TargetPosition.AlmostEqual( to, 5 ) )
 		{
 			TargetPosition = to;
 			needsBuild = true;
