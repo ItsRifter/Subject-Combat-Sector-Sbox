@@ -19,6 +19,55 @@
     "MapSelect": 3,
     "MinPlayers": 1,
     "GameNetworkType": "Multiplayer",
-    "MaxPlayers": 16
+    "MaxPlayers": 16,
+    "PackageSettings": [
+      {
+        "DisplayType": "Integer",
+        "Choices": [],
+        "ConVarName": "scs_startpoints",
+        "DisplayName": "Starting Points",
+        "DefaultValue": "4",
+        "Description": "How many points do each team start with",
+        "Group": "",
+        "Minimum": 4,
+        "Maximum": 90
+      },
+      {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "scs_redteam",
+        "DisplayName": "Toggle Red Team",
+        "DefaultValue": "true",
+        "Description": "[NOTE]\nAt least 2 teams must be active\n\nAllows players to join red team",
+        "Group": ""
+      },
+      {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "scs_blueteam",
+        "DisplayName": "Toggle Blue Team",
+        "DefaultValue": "true",
+        "Description": "[NOTE]\nAt least 2 teams must be active\n\nAllows players to join blue team",
+        "Group": ""
+      },
+      {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "scs_greenteam",
+        "DisplayName": "Toggle Green Team",
+        "DefaultValue": "false",
+        "Description": "[NOTE]\nAt least 2 teams must be active\n\nAllows players to join green team",
+        "Group": ""
+      },
+      {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "scs_yellowteam",
+        "DisplayName": "Toggle Yellow Team",
+        "DefaultValue": "false",
+        "Description": "[NOTE]\nAt least 2 teams must be active\n\nAllows players to join yellow team",
+        "Group": ""
+      }
+    ]
   }
 }

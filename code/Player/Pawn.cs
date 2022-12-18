@@ -73,7 +73,7 @@ public partial class SCSPawn : AnimatedEntity
 		LifeState = LifeState.Alive;
 
 		Controller = new StandardController( this );
-		SetModel( "models/citizen/citizen.vmdl" );
+		SetModel( "models/player/hevsuit_white.vmdl" );
 		CreatePhysHull();
 		MoveToSpawnpoint();
 
